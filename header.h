@@ -30,6 +30,10 @@
 #include <errno.h>
 #include <string.h>
 
+#include "error/error.h"
+#include "memory/memory.h"
+#include "lib64/lib64.h"
+
 /****************************************************/
 /***************       Defines        ***************/
 /****************************************************/

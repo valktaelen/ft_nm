@@ -1,4 +1,5 @@
 SRCS =	lib64/lib64.c \
+		lib64/print.c \
 		error/error.c \
 		memory/get_binary.c \
 		main.c
@@ -24,11 +25,9 @@ $(NAME):	$(OBJS)
 			@$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
 
 clean:
-			@make -C $(LIBFT) clean
 			@${RM} ${OBJS}
 
 fclean:
-			@make -C $(LIBFT) fclean
 			@${RM} ${OBJS} ${NAME}
 
 re: fclean all

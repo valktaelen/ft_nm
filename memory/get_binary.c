@@ -25,9 +25,9 @@ t_file	get_file_info(char *prg_name, char *file_path)
 			map = NULL;
 		}
 	}
+	close(fd);
 	return (t_file){
 		.prg_name = file_path,
-		.prg_fd = fd,
 		.map = map,
 		.size = size
 	};

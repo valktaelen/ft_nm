@@ -32,7 +32,7 @@
 
 #include "error/error.h"
 #include "memory/memory.h"
-#include "lib64/lib64.h"
+#include "lib/lib.h"
 
 /****************************************************/
 /***************       Defines        ***************/

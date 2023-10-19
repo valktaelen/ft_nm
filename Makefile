@@ -1,19 +1,19 @@
-SRCS =	lib64/lib64.c \
-		lib64/print.c \
+SRCS =	lib/lib64.c \
+		lib/print.c \
 		error/error.c \
 		memory/get_binary.c \
 		main.c
 
 OBJS = ${SRCS:.c=.o}
 
-HEADERS =	lib64/lib64.h \
+HEADERS =	lib/lib.h \
 			error/error.h \
 			memory/memory.h \
 			header.h
 
 NAME = a.out
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g3
 RM = rm -rf
 
 %.o : %.c $(HEADERS)

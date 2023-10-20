@@ -10,6 +10,20 @@ size_t	ft_strlen(const char *str)
 		++s;
 	return s - str;
 }
+#include <stdio.h>
+int	ft_strncmp(const char *s1, const char *s2, const size_t n)
+{
+	size_t	i;
+
+	if (s1 == s2 || n == 0)
+		return (0);
+	if (!s1 || !s2)
+		return (1);
+	i = 0;
+	while (i < n - 1 && *s1++ == *s2++)
+		++i;
+	return (*s1 - *s2);
+}
 
 void	print_prg_error_file(t_file *file, char *error, u_int8_t is_errno)
 {

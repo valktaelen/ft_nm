@@ -20,4 +20,12 @@ typedef struct s_binary_64 {
 	char		*shstrtab;
 }	t_binary_64;
 
+typedef struct s_binary_32 {
+	t_file		file;
+	Elf32_Ehdr	*elf_hdr;
+	Elf32_Phdr	*prg_hdr;
+	Elf32_Shdr	*fst_sec_hdr;
+	char		*shstrtab;
+}	t_binary_32;
+
 #endif

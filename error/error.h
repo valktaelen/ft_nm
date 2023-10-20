@@ -13,6 +13,7 @@
 # include "../struct.h"
 
 size_t	ft_strlen(const char *str);
+int	ft_strncmp(const char *s1, const char *s2, const size_t n);
 void	print_prg_error_file(t_file *file, char *error, u_int8_t is_errno);
 void	print_prg_error(char *file_path, char *error, u_int8_t is_errno);
 

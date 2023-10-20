@@ -1,5 +1,10 @@
 SRCS =	lib/lib64.c \
+		lib/lib32.c \
 		lib/print.c \
+		lib/print32.c \
+		lib/print64.c \
+		lib/debug32.c \
+		lib/debug64.c \
 		error/error.c \
 		memory/get_binary.c \
 		main.c

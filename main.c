@@ -3,6 +3,30 @@
 #define DEFAULT_PRG "a.out"
 #define CORRUPT_FILE "Corrupt file"
 
+u_int8_t	ft_nm_32(t_binary_32 *bin)
+{
+	Elf32_Shdr	*section_hdr;
+
+	// printf("%s size: %zu\n", bin->file.prg_name, bin->file.size);
+	size_t i = 0;
+	while (i < bin->elf_hdr->e_shnum)
+	{
+		section_hdr = get_n_section_header_32(bin, i);
+		if (section_hdr->sh_type == SHT_SYMTAB || section_hdr->sh_type == SHT_SYMTAB_SHNDX)
+		{
+			Elf32_Sym	*sym = bin->file.map + section_hdr->sh_offset;
+			while ((void *)sym < bin->file.map + section_hdr->sh_offset + section_hdr->sh_size)
+			{
+				Elf32_Shdr	*str_section_hdr = get_n_section_header_32(bin, section_hdr->sh_link);
+				print_sym_32(sym, bin->file.map + str_section_hdr->sh_offset, bin);
+				sym = (void *)sym + section_hdr->sh_entsize;
+			}
+		}
+		++i;
+	}
+	return (0);
+}
+
 u_int8_t	ft_nm_64(t_binary_64 *bin)
 {
 	Elf64_Shdr	*section_hdr;
@@ -46,14 +70,30 @@ int main(int argc, char *argv[])
 			++i;
 			continue ;
 		}
-		if (get_binary_64(&bin))
+		Elf32_Ehdr	*elf_hdr = get_elf_header_32(bin.file.map, bin.file.size);
+		//print_elf_header_32(elf_hdr);
+		if (elf_hdr->e_ident[EI_CLASS] == 2)
 		{
-			print_prg_error_file(&bin.file, CORRUPT_FILE, 0);
-			munmap(bin.file.map, bin.file.size);
-			++i;
-			continue ;
+			if (get_binary_64(&bin))
+			{
+				print_prg_error_file(&bin.file, CORRUPT_FILE, 0);
+				munmap(bin.file.map, bin.file.size);
+				++i;
+				continue ;
+			}
+			ft_nm_64(&bin);
 		}
-		ft_nm_64(&bin);
+		else
+		{
+			if (get_binary_32((t_binary_32 *)&bin))
+			{
+				print_prg_error_file(&bin.file, CORRUPT_FILE, 0);
+				munmap(bin.file.map, bin.file.size);
+				++i;
+				continue ;
+			}
+			ft_nm_32((t_binary_32 *)&bin);
+		}
 		munmap(bin.file.map, bin.file.size);
 		++i;
 	}

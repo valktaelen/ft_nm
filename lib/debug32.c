@@ -3,6 +3,7 @@
 
 void	print_elf_header_32(Elf32_Ehdr *hdr)
 {
+	const u_int16_t	type = swap_uint32(hdr->e_type, hdr->e_ident[EI_DATA]);
 	printf("ELF header:\n");
 	printf("\tMagic number: %x %c%c%c\n",
 		hdr->e_ident[EI_MAG0],
@@ -10,16 +11,9 @@ void	print_elf_header_32(Elf32_Ehdr *hdr)
 		hdr->e_ident[EI_MAG2],
 		hdr->e_ident[EI_MAG3]
 	);
-	printf("\tARCH: %s\n", hdr->e_ident[EI_CLASS] == 1 ? "32-bit" : "32-bit");
-	printf("\tEndian: %s\n", hdr->e_ident[EI_DATA] == 1 ? "little" : "big");
+	printf("\tARCH: %s\n", hdr->e_ident[EI_CLASS] == FT_32 ? "32-bit" : "64-bit");
+	printf("\tEndian: %s\n", hdr->e_ident[EI_DATA] == FT_LITTLE_ENDIAN ? "little" : "big");
 	printf("\tOriginal or current version of elf: %s\n", hdr->e_ident[EI_VERSION] == 1 ? "true": "false");
-	u_int8_t	os = hdr->e_ident[EI_OSABI];
-	printf("\tTarget OS: %s\n", os == 0 ? "System V" :
-		(
-			os == 3 ? "Linux" : "Other"
-		)
-	);
-	u_int16_t	type = hdr->e_type;
 	printf("\tType: %s\n",
 		type == ET_NONE ? "Unknow" :
 		type == ET_REL ? "Relocatable file" :
@@ -29,15 +23,17 @@ void	print_elf_header_32(Elf32_Ehdr *hdr)
 		"Other"
 	);
 	printf("\tOriginal version of ELF: %s\n", hdr->e_version == 1 ? "true" : "false");
-	printf("\tOffset program header: %u\n", hdr->e_phoff);
-	printf("\tOffset section headers: %u\n", hdr->e_shoff);
-	printf("\tnumber of entries in the section header table: %d\n", hdr->e_shnum);
+	printf("\tOffset program header: %u\n", swap_uint32(hdr->e_phoff, hdr->e_ident[EI_DATA]));
+	printf("\tOffset section headers: %u\n", swap_uint32(hdr->e_shoff, hdr->e_ident[EI_DATA]));
+	printf("\tnumber of entries in the section header table: %d\n", swap_uint16(hdr->e_shnum, hdr->e_ident[EI_DATA]));
 }
 
-void	print_prg_header_32(Elf32_Phdr *hdr)
+void	print_prg_header_32(Elf32_Phdr *hdr, u_int8_t endian)
 {
+	const u_int32_t	type = swap_uint32(hdr->p_type, endian);
+	const u_int32_t	flag = swap_uint32(hdr->p_flags, endian);
+
 	printf("Program header:\n");
-	u_int32_t	type = hdr->p_type;
 	printf("\tType: %s\n",
 		type == PT_NULL ? "Program header table entry unused" :
 		type == PT_LOAD ? "Loadable segment" :
@@ -50,55 +46,58 @@ void	print_prg_header_32(Elf32_Phdr *hdr)
 		"Other"
 	);
 	printf("\tFlags: %s %s %s\n",
-		hdr->p_flags & PF_X ? "Executable segment" : "",
-		hdr->p_flags & PF_W ? "Writeable segment" : "",
-		hdr->p_flags & PF_R ? "Readable segment" : ""
+		flag & PF_X ? "Executable segment" : "",
+		flag & PF_W ? "Writeable segment" : "",
+		flag & PF_R ? "Readable segment" : ""
 	);
 }
 
-void	print_section_header_32(Elf32_Shdr *hdr, char *shstrtab)
+void	print_section_header_32(Elf32_Shdr *hdr, char *shstrtab, u_int8_t endian)
 {
+	const u_int32_t	type = swap_uint32(hdr->sh_type, endian);
+	const u_int32_t	flag = swap_uint32(hdr->sh_flags, endian);
+
 	printf("Section table %s\n", shstrtab + hdr->sh_name);
 	printf("\tType: %s\n",
-		hdr->sh_type == SHT_NULL ? "Section header table entry unused" :
-		hdr->sh_type == SHT_PROGBITS ? "Program data" :
-		hdr->sh_type == SHT_SYMTAB ? "Symbol table" :
-		hdr->sh_type == SHT_STRTAB ? "String table" :
-		hdr->sh_type == SHT_RELA ? "Relocation entries with addends" :
-		hdr->sh_type == SHT_HASH ? "Symbol hash table" :
-		hdr->sh_type == SHT_DYNAMIC ? "Dynamic linking information" :
-		hdr->sh_type == SHT_NOTE ? "Notes" :
-		hdr->sh_type == SHT_NOBITS ? "Program space with no data (bss)" :
-		hdr->sh_type == SHT_REL ? "Relocation entries, no addends" :
-		hdr->sh_type == SHT_SHLIB ? "Reserved" :
-		hdr->sh_type == SHT_DYNSYM ? "Dynamic linker symbol table" :
-		hdr->sh_type == SHT_INIT_ARRAY ? "Array of constructors" :
-		hdr->sh_type == SHT_FINI_ARRAY ? "Array of destructors" :
-		hdr->sh_type == SHT_PREINIT_ARRAY ? "Array of pre-constructors" :
-		hdr->sh_type == SHT_GROUP ? "Section group" :
-		hdr->sh_type == SHT_SYMTAB_SHNDX ? "Extended section indices" :
-		hdr->sh_type == SHT_NUM ? "Number of defined types" :
-		hdr->sh_type == SHT_LOOS ? "Start OS-specific" :
+		type == SHT_NULL ? "Section header table entry unused" :
+		type == SHT_PROGBITS ? "Program data" :
+		type == SHT_SYMTAB ? "Symbol table" :
+		type == SHT_STRTAB ? "String table" :
+		type == SHT_RELA ? "Relocation entries with addends" :
+		type == SHT_HASH ? "Symbol hash table" :
+		type == SHT_DYNAMIC ? "Dynamic linking information" :
+		type == SHT_NOTE ? "Notes" :
+		type == SHT_NOBITS ? "Program space with no data (bss)" :
+		type == SHT_REL ? "Relocation entries, no addends" :
+		type == SHT_SHLIB ? "Reserved" :
+		type == SHT_DYNSYM ? "Dynamic linker symbol table" :
+		type == SHT_INIT_ARRAY ? "Array of constructors" :
+		type == SHT_FINI_ARRAY ? "Array of destructors" :
+		type == SHT_PREINIT_ARRAY ? "Array of pre-constructors" :
+		type == SHT_GROUP ? "Section group" :
+		type == SHT_SYMTAB_SHNDX ? "Extended section indices" :
+		type == SHT_NUM ? "Number of defined types" :
+		type == SHT_LOOS ? "Start OS-specific" :
 		"Other"
 	);
 	printf("\tFlags: %s%s%s%s%s%s%s%s%s%s%s%s%s%s\n",
-		hdr->sh_flags & SHF_WRITE ? "Writable " : "",
-		hdr->sh_flags & SHF_ALLOC ? "Occupies memory during execution " : "",
-		hdr->sh_flags & SHF_EXECINSTR ? "Executable " : "",
-		hdr->sh_flags & SHF_MERGE ? "Might be merged " : "",
-		hdr->sh_flags & SHF_STRINGS ? "Contains null-terminated strings " : "",
-		hdr->sh_flags & SHF_INFO_LINK ? "'sh_info' contains SHT index " : "",
-		hdr->sh_flags & SHF_LINK_ORDER ? "Preserve order after combining " : "",
-		hdr->sh_flags & SHF_OS_NONCONFORMING ? "Non-standard OS specific handling required " : "",
-		hdr->sh_flags & SHF_GROUP ? "Section is member of a group " : "",
-		hdr->sh_flags & SHF_TLS ? "Section hold thread-local data " : "",
-		hdr->sh_flags & SHF_MASKOS ? "OS-specific " : "",
-		hdr->sh_flags & SHF_MASKPROC ? "Processor-specific " : "",
-		hdr->sh_flags & SHF_ORDERED ? "Special ordering requirement (Solaris) " : "",
-		hdr->sh_flags & SHF_EXCLUDE ? "Section is excluded unless referenced or allocated (Solaris) " : ""
+		flag & SHF_WRITE ? "Writable " : "",
+		flag & SHF_ALLOC ? "Occupies memory during execution " : "",
+		flag & SHF_EXECINSTR ? "Executable " : "",
+		flag & SHF_MERGE ? "Might be merged " : "",
+		flag & SHF_STRINGS ? "Contains null-terminated strings " : "",
+		flag & SHF_INFO_LINK ? "'sh_info' contains SHT index " : "",
+		flag & SHF_LINK_ORDER ? "Preserve order after combining " : "",
+		flag & SHF_OS_NONCONFORMING ? "Non-standard OS specific handling required " : "",
+		flag & SHF_GROUP ? "Section is member of a group " : "",
+		flag & SHF_TLS ? "Section hold thread-local data " : "",
+		flag & SHF_MASKOS ? "OS-specific " : "",
+		flag & SHF_MASKPROC ? "Processor-specific " : "",
+		flag & SHF_ORDERED ? "Special ordering requirement (Solaris) " : "",
+		flag & SHF_EXCLUDE ? "Section is excluded unless referenced or allocated (Solaris) " : ""
 	);
-	printf("\tVirtual address of the section in memory: %d\n", hdr->sh_addr);
-	printf("\tOffset of the section in the file image: %u\n", hdr->sh_offset);
-	printf("\tSize of section: %u\n", hdr->sh_size);
-	printf("\tLink section: %u\n", hdr->sh_link);
+	printf("\tVirtual address of the section in memory: %d\n", swap_uint32(hdr->sh_addr, endian));
+	printf("\tOffset of the section in the file image: %u\n", swap_uint32(hdr->sh_offset, endian));
+	printf("\tSize of section: %u\n", swap_uint32(hdr->sh_size, endian));
+	printf("\tLink section: %u\n", swap_uint32(hdr->sh_link, endian));
 }

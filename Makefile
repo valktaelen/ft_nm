@@ -7,6 +7,7 @@ SRCS =	lib/lib64.c \
 		lib/debug64.c \
 		error/error.c \
 		memory/get_binary.c \
+		memory/swap_bits.c \
 		main.c
 
 OBJS = ${SRCS:.c=.o}

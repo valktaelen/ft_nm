@@ -18,6 +18,7 @@ typedef struct s_binary_64 {
 	Elf64_Phdr	*prg_hdr;
 	Elf64_Shdr	*fst_sec_hdr;
 	char		*shstrtab;
+	u_int8_t	endian;
 }	t_binary_64;
 
 typedef struct s_binary_32 {
@@ -26,6 +27,7 @@ typedef struct s_binary_32 {
 	Elf32_Phdr	*prg_hdr;
 	Elf32_Shdr	*fst_sec_hdr;
 	char		*shstrtab;
+	u_int8_t	endian;
 }	t_binary_32;
 
 #endif

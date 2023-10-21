@@ -6,74 +6,70 @@ void	print_sym_32(Elf32_Sym *sym, char *str_tab, t_binary_32 *bin)
 	const u_int8_t	visibility = ELF32_ST_VISIBILITY(sym->st_other);
 	const u_int8_t	type = ELF32_ST_TYPE(sym->st_info);
 	const u_int8_t	bind = ELF32_ST_BIND(sym->st_info);
-	const char		*name = str_tab + sym->st_name;
+	const u_int16_t	shndx = swap_uint16(sym->st_shndx, bin->endian);
+	const char		*name = str_tab + swap_uint32(sym->st_name, bin->endian);
+	char			c;
 	u_int8_t	debug = 0;
-	// if (type != STT_SECTION) return ;
-	if (sym->st_value)
-		print_number_n_digit(sym->st_value, 8);
-	else if ((type == STT_NOTYPE && bind == STB_LOCAL && visibility == STV_DEFAULT && sym->st_shndx == SHN_UNDEF) || sym->st_shndx == SHN_ABS || type == STT_SECTION)
+
+	if ((type == STT_NOTYPE && bind == STB_LOCAL && visibility == STV_DEFAULT && shndx == SHN_UNDEF) || shndx == SHN_ABS)
+		c = print_type('a', bind == STB_GLOBAL);
+	else if (type == STT_OBJECT && bind == STB_WEAK)
+		c = print_type('v', shndx != SHN_UNDEF);
+	else if (bind == STB_WEAK)
+		c = print_type('w', shndx != SHN_UNDEF);
+	else if (shndx != SHN_ABS && shndx != SHN_COMMON && shndx != SHN_UNDEF && shndx != SHN_XINDEX)
+	{
+		Elf32_Shdr	*hdr = get_n_section_header_32(bin, shndx);
+		u_int32_t	sh_flags = swap_uint32(hdr->sh_flags, bin->endian);
+		u_int32_t	sh_type = swap_uint32(hdr->sh_type, bin->endian);
+		if (type == STT_SECTION)
+			name = bin->shstrtab + swap_uint32(hdr->sh_name, bin->endian);
+		if (sh_type == SHT_NOBITS)
+			c = print_type('b', bind == STB_GLOBAL);
+		else if (sh_type == SHT_PROGBITS && (sh_flags == (SHF_ALLOC | SHF_EXECINSTR) || sh_flags == (SHF_ALLOC | SHF_EXECINSTR | SHF_WRITE)))
+			c = print_type('t', bind == STB_GLOBAL);
+		else if (type == STT_SECTION && ft_strncmp(name, DEBUG_SECTION, ft_strlen(DEBUG_SECTION)) == 0)
+			c = print_type('N', 0);
+		else if ((sh_type == SHT_PROGBITS || sh_type == SHT_INIT_ARRAY || sh_type == SHT_FINI_ARRAY || sh_type == SHT_DYNAMIC)
+			&& sh_flags == (SHF_WRITE | SHF_ALLOC))
+			c = print_type('d', bind == STB_GLOBAL);
+		else if (sh_flags & SHF_ALLOC)
+			c = print_type('r', bind == STB_GLOBAL);
+		else if (type == STT_SECTION && (sh_type == SHT_SYMTAB || sh_type == SHT_STRTAB))
+			c = print_type('a', bind == STB_GLOBAL);
+		else if (type == STT_SECTION)
+			c = print_type('n', 0);
+		else
+		{
+			c = print_type('?', 0);
+			c = print_type('?', 0);
+			debug = 1;
+		}
+	}
+	else if (shndx == SHN_UNDEF)
+		c = print_type('U', 0);
+	else
+	{
+		c = print_type('?', 0);
+		//debug = 1;
+	}
+
+	if (swap_uint32(sym->st_value, bin->endian) && c != 'U' && c != 'w')
+		print_number_n_digit(swap_uint32(sym->st_value, bin->endian), 8);
+	else if (
+		(type == STT_NOTYPE && bind == STB_LOCAL && visibility == STV_DEFAULT && shndx == SHN_UNDEF)
+		|| shndx == SHN_ABS || type == STT_SECTION)
 		print_number_n_digit(0, 8);
 	else
 		write(1, "        ", 8);
 	write(1, SEP_SPACE, 1);
-	// if (type == STT_SECTION)
-	// {
-	// 	Elf32_Shdr	*s = get_n_section_header_32(bin, sym->st_shndx);
-	// 	if (!s)
-	// 		return ;
-	// 	name = bin->shstrtab + s->sh_name;
-	// 	printf("%zu\n", ft_strlen(DEBUG_SECTION));
-	// 	if (s->sh_type == )
-	// 	if (ft_strncmp(name, DEBUG_SECTION, ft_strlen(DEBUG_SECTION)) == 0)
-	// 		print_type('N', 0);
-	// 	else
-	// 		print_type('n', 0);
-	// }
-	// else
-	if ((type == STT_NOTYPE && bind == STB_LOCAL && visibility == STV_DEFAULT && sym->st_shndx == SHN_UNDEF) || sym->st_shndx == SHN_ABS)
-		print_type('a', bind == STB_GLOBAL);
-	else if (type == STT_OBJECT && bind == STB_WEAK)
-		print_type('v', sym->st_shndx != SHN_UNDEF);
-	else if (bind == STB_WEAK)
-		print_type('w', sym->st_shndx != SHN_UNDEF);
-	else if (sym->st_shndx != SHN_ABS && sym->st_shndx != SHN_COMMON && sym->st_shndx != SHN_UNDEF && sym->st_shndx != SHN_XINDEX)
-	{
-		Elf32_Shdr	*hdr = get_n_section_header_32(bin, sym->st_shndx);
-		if (type == STT_SECTION)
-			name = bin->shstrtab + hdr->sh_name;
-		if (hdr->sh_flags == SHF_ALLOC)
-			print_type('r', bind == STB_GLOBAL);
-		else if (hdr->sh_type == SHT_NOBITS)
-			print_type('b', bind == STB_GLOBAL);
-		else if (hdr->sh_type == SHT_PROGBITS && hdr->sh_flags == (SHF_ALLOC | SHF_EXECINSTR))
-			print_type('t', bind == STB_GLOBAL);
-		else if (ft_strncmp(name, DEBUG_SECTION, ft_strlen(DEBUG_SECTION)) == 0)
-			print_type('N', 0);
-		else if ((hdr->sh_type == SHT_PROGBITS || hdr->sh_type == SHT_INIT_ARRAY || hdr->sh_type == SHT_FINI_ARRAY || hdr->sh_type == SHT_DYNAMIC)
-			&& hdr->sh_flags == (SHF_WRITE | SHF_ALLOC))
-			print_type('d', bind == STB_GLOBAL);
-		else if (type == STT_SECTION)
-			print_type('n', 0);
-		else
-		{
-			print_type('?', 0);
-			print_type('?', 0);
-			debug = 1;
-		}
-	}
-	else if (sym->st_shndx == SHN_UNDEF)
-		print_type('U', 0);
-	else
-	{
-		print_type('?', 0);
-		//debug = 1;
-	}
-
-
+	write(1, &c, 1);
 	write(1, SEP_SPACE, 1);
 	write(1, name, ft_strlen(name));
 	write(1, SEP_NL, 1);
-
+	// u_int32_t	val = swap_uint32(sym->st_value, bin->endian);
+	// if (val == 0x00011b20)
+	// 	debug = 1;
 	if (debug)
 	{
 		printf("%s\n\ttype: %s\n\tbind: %s\n\tvisibility: %s\n\treferto section: %s %u\n",
@@ -102,56 +98,56 @@ void	print_sym_32(Elf32_Sym *sym, char *str_tab, t_binary_32 *bin)
 			visibility == STV_HIDDEN	? "HIDDEN   " :
 			visibility == STV_PROTECTED	? "PROTECTED" :
 										"?        ",
-			sym->st_shndx == SHN_ABS	? "ABS   " :
-			sym->st_shndx == SHN_COMMON	? "COMMON" :// c C
-			sym->st_shndx == SHN_UNDEF	? "UNDEF " :
-			sym->st_shndx == SHN_XINDEX	? "XINDEX" :
+			shndx == SHN_ABS	? "ABS   " :
+			shndx == SHN_COMMON	? "COMMON" :// c C
+			shndx == SHN_UNDEF	? "UNDEF " :
+			shndx == SHN_XINDEX	? "XINDEX" :
 										"?     ", //b (section = .bss); d (section = .data); t (section = .text)
-			sym->st_shndx
+			shndx
 		);
-		if (sym->st_shndx != SHN_ABS && sym->st_shndx != SHN_COMMON && sym->st_shndx != SHN_UNDEF && sym->st_shndx != SHN_XINDEX)
+		if (shndx != SHN_ABS && shndx != SHN_COMMON && shndx != SHN_UNDEF && shndx != SHN_XINDEX)
 		{
-			Elf32_Shdr	*hdr = get_n_section_header_32(bin, sym->st_shndx);
+			Elf32_Shdr	*hdr = get_n_section_header_32(bin, shndx);
+			u_int32_t	sh_flags = swap_uint32(hdr->sh_flags, bin->endian);
+			u_int32_t	sh_type = swap_uint32(hdr->sh_type, bin->endian);
 			printf("\t\t%s\n\t\ttypes: %s\n\t\tflags: %s%s%s%s%s%s%s%s%s%s%s%s%s%s\n\t\tlink %d\n",
-				bin->shstrtab + hdr->sh_name,
-				hdr->sh_type == SHT_NULL ?			"Section header table entry unused" :
-				hdr->sh_type == SHT_PROGBITS ?		"Program data                     " :
-				hdr->sh_type == SHT_SYMTAB ?		"Symbol table                     " :
-				hdr->sh_type == SHT_STRTAB ?		"String table                     " :
-				hdr->sh_type == SHT_RELA ?			"Relocation entries with addends  " :
-				hdr->sh_type == SHT_HASH ?			"Symbol hash table                " :
-				hdr->sh_type == SHT_DYNAMIC ?		"Dynamic linking information      " :
-				hdr->sh_type == SHT_NOTE ?			"Notes                            " :
-				hdr->sh_type == SHT_NOBITS ?		"Program space with no data (bss) " :
-				hdr->sh_type == SHT_REL ?			"Relocation entries, no addends   " :
-				hdr->sh_type == SHT_SHLIB ?			"Reserved                         " :
-				hdr->sh_type == SHT_DYNSYM ?		"Dynamic linker symbol table      " :
-				hdr->sh_type == SHT_INIT_ARRAY ?	"Array of constructors            " :
-				hdr->sh_type == SHT_FINI_ARRAY ?	"Array of destructors             " :
-				hdr->sh_type == SHT_PREINIT_ARRAY ?	"Array of pre-constructors        " :
-				hdr->sh_type == SHT_GROUP ?			"Section group                    " :
-				hdr->sh_type == SHT_SYMTAB_SHNDX ?	"Extended section indices         " :
-				hdr->sh_type == SHT_NUM ?			"Number of defined types          " :
-				hdr->sh_type == SHT_LOOS ?			"Start OS-specific                " :
+				bin->shstrtab + swap_uint32(hdr->sh_name, bin->endian),
+				sh_type == SHT_NULL ?			"Section header table entry unused" :
+				sh_type == SHT_PROGBITS ?		"Program data                     " :
+				sh_type == SHT_SYMTAB ?		"Symbol table                     " :
+				sh_type == SHT_STRTAB ?		"String table                     " :
+				sh_type == SHT_RELA ?			"Relocation entries with addends  " :
+				sh_type == SHT_HASH ?			"Symbol hash table                " :
+				sh_type == SHT_DYNAMIC ?		"Dynamic linking information      " :
+				sh_type == SHT_NOTE ?			"Notes                            " :
+				sh_type == SHT_NOBITS ?		"Program space with no data (bss) " :
+				sh_type == SHT_REL ?			"Relocation entries, no addends   " :
+				sh_type == SHT_SHLIB ?			"Reserved                         " :
+				sh_type == SHT_DYNSYM ?		"Dynamic linker symbol table      " :
+				sh_type == SHT_INIT_ARRAY ?	"Array of constructors            " :
+				sh_type == SHT_FINI_ARRAY ?	"Array of destructors             " :
+				sh_type == SHT_PREINIT_ARRAY ?	"Array of pre-constructors        " :
+				sh_type == SHT_GROUP ?			"Section group                    " :
+				sh_type == SHT_SYMTAB_SHNDX ?	"Extended section indices         " :
+				sh_type == SHT_NUM ?			"Number of defined types          " :
+				sh_type == SHT_LOOS ?			"Start OS-specific                " :
 													"Other                            ",
-				hdr->sh_flags & SHF_WRITE ? "Writable " : "",
-				hdr->sh_flags & SHF_ALLOC ? "Occupies memory during execution " : "",
-				hdr->sh_flags & SHF_EXECINSTR ? "Executable " : "",
-				hdr->sh_flags & SHF_MERGE ? "Might be merged " : "",
-				hdr->sh_flags & SHF_STRINGS ? "Contains null-terminated strings " : "",
-				hdr->sh_flags & SHF_INFO_LINK ? "'sh_info' contains SHT index " : "",
-				hdr->sh_flags & SHF_LINK_ORDER ? "Preserve order after combining " : "",
-				hdr->sh_flags & SHF_OS_NONCONFORMING ? "Non-standard OS specific handling required " : "",
-				hdr->sh_flags & SHF_GROUP ? "Section is member of a group " : "",
-				hdr->sh_flags & SHF_TLS ? "Section hold thread-local data " : "",
-				hdr->sh_flags & SHF_MASKOS ? "OS-specific " : "",
-				hdr->sh_flags & SHF_MASKPROC ? "Processor-specific " : "",
-				hdr->sh_flags & SHF_ORDERED ? "Special ordering requirement (Solaris) " : "",
-				hdr->sh_flags & SHF_EXCLUDE ? "Section is excluded unless referenced or allocated (Solaris) " : "",
-				hdr->sh_link
+				sh_flags & SHF_WRITE ? "Writable " : "",
+				sh_flags & SHF_ALLOC ? "Occupies memory during execution " : "",
+				sh_flags & SHF_EXECINSTR ? "Executable " : "",
+				sh_flags & SHF_MERGE ? "Might be merged " : "",
+				sh_flags & SHF_STRINGS ? "Contains null-terminated strings " : "",
+				sh_flags & SHF_INFO_LINK ? "'sh_info' contains SHT index " : "",
+				sh_flags & SHF_LINK_ORDER ? "Preserve order after combining " : "",
+				sh_flags & SHF_OS_NONCONFORMING ? "Non-standard OS specific handling required " : "",
+				sh_flags & SHF_GROUP ? "Section is member of a group " : "",
+				sh_flags & SHF_TLS ? "Section hold thread-local data " : "",
+				sh_flags & SHF_MASKOS ? "OS-specific " : "",
+				sh_flags & SHF_MASKPROC ? "Processor-specific " : "",
+				sh_flags & SHF_ORDERED ? "Special ordering requirement (Solaris) " : "",
+				sh_flags & SHF_EXCLUDE ? "Section is excluded unless referenced or allocated (Solaris) " : "",
+				swap_uint32(hdr->sh_link, bin->endian)
 			);
-
-
 		}
 	}
 }

@@ -13,6 +13,8 @@ void	print_sym_32(Elf32_Sym *sym, char *str_tab, t_binary_32 *bin)
 
 	if ((type == STT_NOTYPE && bind == STB_LOCAL && visibility == STV_DEFAULT && shndx == SHN_UNDEF) || shndx == SHN_ABS)
 		c = print_type('a', bind == STB_GLOBAL);
+	else if (type == STT_LOOS)
+		c = print_type('i', 0);
 	else if (type == STT_OBJECT && bind == STB_WEAK)
 		c = print_type('v', shndx != SHN_UNDEF);
 	else if (bind == STB_WEAK)
@@ -31,7 +33,7 @@ void	print_sym_32(Elf32_Sym *sym, char *str_tab, t_binary_32 *bin)
 		else if (type == STT_SECTION && ft_strncmp(name, DEBUG_SECTION, ft_strlen(DEBUG_SECTION)) == 0)
 			c = print_type('N', 0);
 		else if ((sh_type == SHT_PROGBITS || sh_type == SHT_INIT_ARRAY || sh_type == SHT_FINI_ARRAY || sh_type == SHT_DYNAMIC)
-			&& sh_flags == (SHF_WRITE | SHF_ALLOC))
+			&& ((sh_flags & (SHF_WRITE | SHF_ALLOC)) == (SHF_WRITE | SHF_ALLOC)))
 			c = print_type('d', bind == STB_GLOBAL);
 		else if (sh_flags & SHF_ALLOC)
 			c = print_type('r', bind == STB_GLOBAL);
@@ -53,9 +55,9 @@ void	print_sym_32(Elf32_Sym *sym, char *str_tab, t_binary_32 *bin)
 		c = print_type('?', 0);
 		//debug = 1;
 	}
-
-	if (swap_uint32(sym->st_value, bin->endian) && c != 'U' && c != 'w')
-		print_number_n_digit(swap_uint32(sym->st_value, bin->endian), 8);
+	Elf32_Addr	val = swap_uint32(sym->st_value, bin->endian);
+	if (c != 'U' && c != 'w')
+		print_number_n_digit(val, 8);
 	else if (
 		(type == STT_NOTYPE && bind == STB_LOCAL && visibility == STV_DEFAULT && shndx == SHN_UNDEF)
 		|| shndx == SHN_ABS || type == STT_SECTION)
@@ -67,7 +69,7 @@ void	print_sym_32(Elf32_Sym *sym, char *str_tab, t_binary_32 *bin)
 	write(1, SEP_SPACE, 1);
 	write(1, name, ft_strlen(name));
 	write(1, SEP_NL, 1);
-	// u_int32_t	val = swap_uint32(sym->st_value, bin->endian);
+
 	// if (val == 0x00011b20)
 	// 	debug = 1;
 	if (debug)

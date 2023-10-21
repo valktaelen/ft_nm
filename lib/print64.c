@@ -13,6 +13,8 @@ void	print_sym_64(Elf64_Sym *sym, char *str_tab, t_binary_64 *bin)
 
 	if ((type == STT_NOTYPE && bind == STB_LOCAL && visibility == STV_DEFAULT && shndx == SHN_UNDEF) || shndx == SHN_ABS)
 		c = print_type('a', bind == STB_GLOBAL);
+	else if (type == STT_LOOS)
+		c = print_type('i', 0);
 	else if (type == STT_OBJECT && bind == STB_WEAK)
 		c = print_type('v', shndx != SHN_UNDEF);
 	else if (bind == STB_WEAK)
@@ -31,7 +33,7 @@ void	print_sym_64(Elf64_Sym *sym, char *str_tab, t_binary_64 *bin)
 		else if (type == STT_SECTION && ft_strncmp(name, DEBUG_SECTION, ft_strlen(DEBUG_SECTION)) == 0)
 			c = print_type('N', 0);
 		else if ((sh_type == SHT_PROGBITS || sh_type == SHT_INIT_ARRAY || sh_type == SHT_FINI_ARRAY || sh_type == SHT_DYNAMIC)
-			&& sh_flags == (SHF_WRITE | SHF_ALLOC))
+			&& ((sh_flags & (SHF_WRITE | SHF_ALLOC)) == (SHF_WRITE | SHF_ALLOC)))
 			c = print_type('d', bind == STB_GLOBAL);
 		else if (sh_flags & SHF_ALLOC)
 			c = print_type('r', bind == STB_GLOBAL);
@@ -55,7 +57,7 @@ void	print_sym_64(Elf64_Sym *sym, char *str_tab, t_binary_64 *bin)
 	}
 
 	Elf64_Addr	val = swap_uint64(sym->st_value, bin->endian);
-	if (val && c != 'U' && c != 'w')
+	if (c != 'U' && c != 'w')
 		print_number_n_digit(val, 16);
 	else if (
 		(type == STT_NOTYPE && bind == STB_LOCAL && visibility == STV_DEFAULT && shndx == SHN_UNDEF)

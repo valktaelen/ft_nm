@@ -6,7 +6,11 @@ Elf64_Ehdr *get_elf_header_64(void * const map, const size_t size)
 	Elf64_Ehdr * const	elf_header = map;
 
 	if (size >= sizeof(Elf64_Ehdr) && size >= swap_uint16(elf_header->e_ehsize, elf_header->e_ident[EI_DATA]))
-		return (elf_header);
+		if (elf_header->e_ident[EI_MAG0] == ELFMAG0
+			&& elf_header->e_ident[EI_MAG1] == ELFMAG1
+			&& elf_header->e_ident[EI_MAG2] == ELFMAG2
+			&& elf_header->e_ident[EI_MAG3] == ELFMAG3)
+			return (elf_header);
 	return (NULL);
 }
 

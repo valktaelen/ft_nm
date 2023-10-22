@@ -17,7 +17,11 @@ Elf32_Phdr	*get_prg_header_32(void * const map, const size_t size, const u_int8_
 	if (!elf_header)
 		return (NULL);
 	if (size >= swap_uint32(elf_header->e_phoff, endian) + swap_uint16(elf_header->e_phentsize, endian))
-		return (map + swap_uint32(elf_header->e_phoff, endian));
+		if (elf_header->e_ident[EI_MAG0] == ELFMAG0
+			&& elf_header->e_ident[EI_MAG1] == ELFMAG1
+			&& elf_header->e_ident[EI_MAG2] == ELFMAG2
+			&& elf_header->e_ident[EI_MAG3] == ELFMAG3)
+			return (map + swap_uint32(elf_header->e_phoff, endian));
 	return (NULL);
 }
 
@@ -60,7 +64,7 @@ Elf32_Shdr	*get_n_section_header_32(
 		return ((Elf32_Shdr *)end);
 	return (NULL);
 }
-#include <stdio.h>
+
 u_int8_t	get_binary_32(t_binary_32 *bin)
 {
 	Elf32_Shdr	*section_hdr;

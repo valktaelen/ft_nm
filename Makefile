@@ -6,7 +6,8 @@ SRCS =	lib/lib64.c \
 		lib/debug32.c \
 		lib/debug64.c \
 		error/error.c \
-		memory/get_binary.c \
+		error/utils.c \
+		memory/file.c \
 		memory/swap_bits.c \
 		main.c
 
@@ -19,7 +20,7 @@ HEADERS =	lib/lib.h \
 
 NAME = a.out
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g3
+CFLAGS = -Wall -Wextra -Werror -g3# -fsanitize=address
 RM = rm -rf
 
 %.o : %.c $(HEADERS)

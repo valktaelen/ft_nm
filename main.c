@@ -1,7 +1,6 @@
 #include "header.h"
 
 #define DEFAULT_PRG "a.out"
-#define CORRUPT_FILE "Corrupt file"
 
 u_int8_t	ft_nm_32(t_binary_32 *bin)
 {
@@ -10,7 +9,9 @@ u_int8_t	ft_nm_32(t_binary_32 *bin)
 	Elf32_Word	size;
 	Elf32_Off	offset;
 	Elf32_Half	i;
+	u_int8_t	pass;
 
+	pass = 1;
 	i = 0;
 	while (i < swap_uint16(bin->elf_hdr->e_shnum, bin->endian))
 	{
@@ -24,7 +25,10 @@ u_int8_t	ft_nm_32(t_binary_32 *bin)
 			while ((void *)sym < bin->file.map + offset + size)
 			{
 				Elf32_Shdr	*str_section_hdr = get_n_section_header_32(bin, swap_uint32(section_hdr->sh_link, bin->endian));
-				print_sym_32(sym, bin->file.map + swap_uint32(str_section_hdr->sh_offset, bin->endian), bin);
+				if (pass)
+					pass = 0;
+				else
+					print_sym_32(sym, bin->file.map + swap_uint32(str_section_hdr->sh_offset, bin->endian), bin);
 				sym = (void *)sym + swap_uint32(section_hdr->sh_entsize, bin->endian);
 			}
 		}
@@ -40,8 +44,10 @@ u_int8_t	ft_nm_64(t_binary_64 *bin)
 	Elf64_Word	size;
 	Elf64_Off	offset;
 	Elf64_Half	i;
+	u_int8_t	pass;
 
 	i = 0;
+	pass = 1;
 	while (i < swap_uint16(bin->elf_hdr->e_shnum, bin->endian))
 	{
 		section_hdr = get_n_section_header_64(bin, i);
@@ -54,7 +60,10 @@ u_int8_t	ft_nm_64(t_binary_64 *bin)
 			while ((void *)sym < bin->file.map + offset + size)
 			{
 				Elf64_Shdr	*str_section_hdr = get_n_section_header_64(bin, swap_uint32(section_hdr->sh_link, bin->endian));
-				print_sym_64(sym, bin->file.map + swap_uint64(str_section_hdr->sh_offset, bin->endian), bin);
+				if (pass)
+					pass = 0;
+				else
+					print_sym_64(sym, bin->file.map + swap_uint64(str_section_hdr->sh_offset, bin->endian), bin);
 				sym = (void *)sym + swap_uint64(section_hdr->sh_entsize, bin->endian);
 			}
 		}
@@ -83,12 +92,19 @@ int main(int argc, char *argv[])
 			continue ;
 		}
 		Elf32_Ehdr	*elf_hdr = get_elf_header_32(bin.file.map, bin.file.size);
+		if (!elf_hdr)
+		{
+			print_prg_error_file(&bin.file, ERR_FILE, 0);
+			munmap(bin.file.map, bin.file.size);
+			++i;
+			continue ;
+		}
 		//print_elf_header_32(elf_hdr);
 		if (elf_hdr->e_ident[EI_CLASS] == FT_64)
 		{
 			if (get_binary_64(&bin))
 			{
-				print_prg_error_file(&bin.file, CORRUPT_FILE, 0);
+				print_prg_error_file(&bin.file, ERR_FILE, 0);
 				munmap(bin.file.map, bin.file.size);
 				++i;
 				continue ;
@@ -99,19 +115,15 @@ int main(int argc, char *argv[])
 		{
 			if (get_binary_32((t_binary_32 *)&bin))
 			{
-				print_prg_error_file(&bin.file, CORRUPT_FILE, 0);
+				print_prg_error_file(&bin.file, ERR_FILE, 0);
 				munmap(bin.file.map, bin.file.size);
 				++i;
 				continue ;
 			}
 			ft_nm_32((t_binary_32 *)&bin);
 		}
-		write(1, " ", 1);
-		write(1, "\n", 1);
 		munmap(bin.file.map, bin.file.size);
 		++i;
 	}
 	return 0;
 }
-
-Elf64_Sym toto;

@@ -6,14 +6,15 @@
 # include <unistd.h>
 # include <string.h>
 
-# define SEP_1 ": "
-# define SEP_SPACE " "
-# define SEP_NL "\n"
+# define SEP_1		": "
+# define SEP_SPACE	" "
+# define SEP_NL		"\n"
+# define ERR_FILE	"file format not reconized"
 
 # include "../struct.h"
 
 size_t	ft_strlen(const char *str);
-int	ft_strncmp(const char *s1, const char *s2, const size_t n);
+int		ft_strncmp(const char *s1, const char *s2, const size_t n);
 void	print_prg_error_file(t_file *file, char *error, u_int8_t is_errno);
 void	print_prg_error(char *file_path, char *error, u_int8_t is_errno);
 

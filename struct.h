@@ -8,6 +8,7 @@
 typedef struct s_file
 {
 	char *	prg_name;
+	char *	file_path;
 	void *	map;
 	size_t	size;
 }	t_file;

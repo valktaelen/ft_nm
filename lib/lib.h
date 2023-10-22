@@ -8,7 +8,8 @@
 # include "../error/error.h"
 # include "../memory/memory.h"
 
-# define DEBUG_SECTION ".debug"
+# define DEBUG_SECTION	".debug"
+# define MAGIC			((const unsigned char *)"\x7F\x45\x4C\x46")
 
 // 64-bits
 

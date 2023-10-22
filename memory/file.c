@@ -6,6 +6,8 @@ size_t	get_file_size(const char *file_path)
 
 	if (stat(file_path, &my_stat) != 0)
 		return 0;
+	if (!S_ISREG(my_stat.st_mode) && !S_ISLNK(my_stat.st_mode))
+		return (0);
 	return my_stat.st_size;
 }
 
@@ -27,7 +29,8 @@ t_file	get_file_info(char *prg_name, char *file_path)
 	}
 	close(fd);
 	return (t_file){
-		.prg_name = file_path,
+		.prg_name = prg_name,
+		.file_path = file_path,
 		.map = map,
 		.size = size
 	};

@@ -65,6 +65,11 @@ char	ft_symbol_get_type_64(t_nm *nm, const t_Sym_64 *sym, char *name)
 	else if (sym->st_shndx != SHN_ABS && sym->st_shndx != SHN_COMMON && sym->st_shndx != SHN_UNDEF && sym->st_shndx != SHN_XINDEX)
 	{
 		Elf64_Shdr	*hdr = ft_get_section_hdr_64(nm, sym->st_shndx);
+		if (!hdr)
+		{
+			print_prg_error(nm, ERR_FILE_RECONIZED);
+			return (0);
+		}
 		u_int64_t	sh_flags = swap_uint64(hdr->sh_flags, nm->global_infos.endian);
 		u_int64_t	sh_type = swap_uint32(hdr->sh_type, nm->global_infos.endian);
 		if (sh_type == SHT_NOBITS)

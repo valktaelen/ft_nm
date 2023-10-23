@@ -21,11 +21,18 @@ int	ft_nm_symbol_32(t_nm *nm, const t_S_hdr_32 *hdr, Elf32_Sym *map_sym)
 	}
 	node_sym->st_value = sym->st_value;
 	node_sym->name = name;
+	node_sym->type = ft_symbol_get_type_32(nm, sym, name);
+	if (!node_sym->type)
+	{
+		free(name);
+		free((void *)sym);
+		free(node_sym);
+		return (1);
+	}
 	node_sym->st_shndx = sym->st_shndx;
 	node_sym->visibility = sym->visibility;
 	node_sym->info_type = sym->type;
 	node_sym->bind = sym->bind;
-	node_sym->type = ft_symbol_get_type_32(nm, sym, name);
 	ft_list_sym_add_32(nm, node_sym);
 	free((void *)sym);
 	return (0);

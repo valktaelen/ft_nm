@@ -1,4 +1,4 @@
-#include "memory.h"
+#include "utils.h"
 
 u_int8_t	which_endian(void)
 {

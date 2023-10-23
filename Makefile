@@ -1,26 +1,34 @@
-SRCS =	lib/lib64.c \
-		lib/lib32.c \
-		lib/print.c \
-		lib/print32.c \
-		lib/print64.c \
-		lib/debug32.c \
-		lib/debug64.c \
-		error/error.c \
-		error/utils.c \
-		memory/file.c \
-		memory/swap_bits.c \
-		main.c
+SRCS =	main.c 				\
+		lib/32/algo.c		\
+		lib/32/header.c		\
+		lib/32/list.c		\
+		lib/32/print.c		\
+		lib/32/section.c	\
+		lib/32/symbol.c		\
+		lib/64/algo.c		\
+		lib/64/header.c		\
+		lib/64/list.c		\
+		lib/64/print.c		\
+		lib/64/section.c	\
+		lib/64/symbol.c		\
+		lib/lib.c			\
+		utils/file.c		\
+		utils/memory.c		\
+		utils/swap_bits.c	\
+		utils/tools.c		\
+
 
 OBJS = ${SRCS:.c=.o}
 
-HEADERS =	lib/lib.h \
-			error/error.h \
-			memory/memory.h \
-			header.h
+HEADERS =	header.h		\
+			utils/struct.h	\
+			utils/utils.h	\
+			lib/lib.h	\
+
 
 NAME = a.out
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -g3# -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
 RM = rm -rf
 
 %.o : %.c $(HEADERS)

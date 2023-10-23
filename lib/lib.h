@@ -1,76 +1,58 @@
-#ifndef LIB64_H
+#ifndef LIB_H
 
-# define LIB64_H
-# include <elf.h>
-# include <sys/types.h>
+# define LIB_H
+
+# include "../utils/struct.h"
+# include "../utils/utils.h"
 # include <stdlib.h>
 
-# include "../error/error.h"
-# include "../memory/memory.h"
 
-# define DEBUG_SECTION	".debug"
-# define MAGIC			((const unsigned char *)"\x7F\x45\x4C\x46")
+/*******************************************/
+/**************** General ******************/
+/*******************************************/
 
-// 64-bits
+int		ft_get_global_infos(t_nm *nm);
 
-Elf64_Ehdr	*get_elf_header_64(
-	void * const map,
-	const size_t size
-);
-Elf64_Phdr	*get_prg_header_64(
-	void * const map,
-	const size_t size,
-	u_int8_t endian
-);
-Elf64_Shdr	*get_first_section_header_64(
-	void * const map,
-	const size_t size,
-	u_int8_t endian
-);
-Elf64_Shdr	*get_next_section_header_64(
-	void * const map,
-	const size_t size,
-	const Elf64_Shdr *current_section_header,
-	u_int8_t endian
-);
+/*******************************************/
+/**************** 64-bits ******************/
+/*******************************************/
 
-Elf64_Shdr	*get_n_section_header_64(
-	t_binary_64 *bin,
-	size_t n
-);
+int		ft_nm_64(t_nm *nm);
+void	ft_print_64(t_nm *nm, int index);
 
-u_int8_t	get_binary_64(t_binary_64 *bin);
+Elf64_Shdr	*ft_get_section_hdr_64(t_nm *nm, Elf64_Half i_table);
+int	ft_get_section_hdrs_64(t_nm *nm);
+int	ft_get_elf_hdr_infos_64(t_nm *nm);
+// section
+void	*ft_get_section_content_64(
+	t_nm *nm,
+	const Elf64_Shdr *hdr);
+t_S_hdr_64	*ft_get_section_64(t_nm *nm, Elf64_Shdr *map_hdr);
+void	ft_clean_nm_64(t_symbol_64 *syms);
+void	ft_list_sym_add_64(t_nm *nm, t_symbol_64 *sym);
+t_Sym_64	*ft_get_symbol_64(t_nm *nm, Elf64_Sym *map_sym);
+char	ft_symbol_get_type_64(t_nm *nm, const t_Sym_64 *sym, char *name);
+char	*ft_symbol_get_name_64(t_nm *nm, const t_S_hdr_64 *hdr, const t_Sym_64 *sym);
 
+/*******************************************/
+/**************** 32-bits ******************/
+/*******************************************/
 
-// 32-bits
+int		ft_nm_32(t_nm *nm);
+void	ft_print_32(t_nm *nm, int index);
 
-Elf32_Ehdr *get_elf_header_32(void * const map, const size_t size);
-Elf32_Phdr	*get_prg_header_32(void * const map, const size_t size, u_int8_t endian);
-Elf32_Shdr	*get_first_section_header_32(void * const map, const size_t size, u_int8_t endian);
-Elf32_Shdr	*get_next_section_header_32(
-	void * const map,
-	const size_t size,
-	const Elf32_Shdr *current_section_header,
-	u_int8_t endian
-);
-Elf32_Shdr	*get_n_section_header_32(
-	t_binary_32 *bin,
-	size_t n
-);
-u_int8_t	get_binary_32(t_binary_32 *bin);
-
-// print
-
-void	print_number_n_digit(Elf64_Addr n, size_t digit);
-char	print_type(char lower_letter, u_int8_t to_upper);
-
-void	print_elf_header_64(Elf64_Ehdr *hdr);
-void	print_prg_header_64(Elf64_Phdr *hdr);
-void	print_section_header_64(Elf64_Shdr *hdr, char *shstrtab);
-void	print_sym_64(Elf64_Sym *sym, char *str_tab, t_binary_64 *bin);
-void	print_elf_header_32(Elf32_Ehdr *hdr);
-void	print_prg_header_32(Elf32_Phdr *hdr, u_int8_t endian);
-void	print_section_header_32(Elf32_Shdr *hdr, char *shstrtab, u_int8_t endian);
-void	print_sym_32(Elf32_Sym *sym, char *str_tab, t_binary_32 *bin);
+Elf32_Shdr	*ft_get_section_hdr_32(t_nm *nm, Elf32_Half i_table);
+int	ft_get_section_hdrs_32(t_nm *nm);
+int	ft_get_elf_hdr_infos_32(t_nm *nm);
+// section
+void	*ft_get_section_content_32(
+	t_nm *nm,
+	const Elf32_Shdr *hdr);
+t_S_hdr_32	*ft_get_section_32(t_nm *nm, Elf32_Shdr *map_hdr);
+void	ft_clean_nm_32(t_symbol_32 *syms);
+void	ft_list_sym_add_32(t_nm *nm, t_symbol_32 *sym);
+t_Sym_32	*ft_get_symbol_32(t_nm *nm, Elf32_Sym *map_sym);
+char	ft_symbol_get_type_32(t_nm *nm, const t_Sym_32 *sym, char *name);
+char	*ft_symbol_get_name_32(t_nm *nm, const t_S_hdr_32 *hdr, const t_Sym_32 *sym);
 
 #endif

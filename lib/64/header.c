@@ -1,5 +1,16 @@
-#include "../lib.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   header.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/23 06:52:07 by aartiges          #+#    #+#             */
+/*   Updated: 2023/10/23 06:54:22 by aartiges         ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "../lib.h"
 
 Elf64_Shdr	*ft_get_section_hdr_64(t_nm *nm, Elf64_Half i_table)
 {
@@ -19,7 +30,8 @@ int	ft_get_section_hdrs_64(t_nm *nm)
 	if (nm->bin_64.e_shoff == 0
 		|| nm->bin_64.e_shentsize < sizeof(Elf64_Shdr)
 		|| nm->bin_64.e_shnum == 0
-		|| nm->bin_64.e_shoff + nm->bin_64.e_shentsize * nm->bin_64.e_shnum > nm->file_size)
+		|| nm->bin_64.e_shoff
+		+ nm->bin_64.e_shentsize * nm->bin_64.e_shnum > nm->file_size)
 	{
 		print_prg_error(nm, ERR_FILE_RECONIZED);
 		return (1);

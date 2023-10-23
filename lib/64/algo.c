@@ -1,4 +1,45 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   algo.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/23 06:52:04 by aartiges          #+#    #+#             */
+/*   Updated: 2023/10/23 07:36:24 by aartiges         ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../lib.h"
+
+static t_symbol_64	*ft_nm_symbol_create_64(
+	t_nm *nm,
+	const t_Sym_64 *sym,
+	char *name
+)
+{
+	t_symbol_64	*node_sym;
+
+	node_sym = malloc(sizeof(t_symbol_64));
+	if (!node_sym)
+	{
+		print_prg_error(nm, ERR_MALLOC);
+		return (NULL);
+	}
+	node_sym->st_value = sym->st_value;
+	node_sym->name = name;
+	node_sym->type = ft_symbol_get_type_64(nm, sym, name);
+	if (!node_sym->type)
+	{
+		free(node_sym);
+		return (NULL);
+	}
+	node_sym->st_shndx = sym->st_shndx;
+	node_sym->visibility = sym->visibility;
+	node_sym->info_type = sym->type;
+	node_sym->bind = sym->bind;
+	return (node_sym);
+}
 
 int	ft_nm_symbol_64(t_nm *nm, const t_S_hdr_64 *hdr, Elf64_Sym *map_sym)
 {
@@ -11,30 +52,11 @@ int	ft_nm_symbol_64(t_nm *nm, const t_S_hdr_64 *hdr, Elf64_Sym *map_sym)
 	name = ft_symbol_get_name_64(nm, hdr, sym);
 	if (!name)
 		return (1);
-	node_sym = malloc(sizeof(t_symbol_64));
-	if (!node_sym)
-	{
-		print_prg_error(nm, ERR_MALLOC);
-		free(name);
-		free((void *)sym);
-		return (1);
-	}
-	node_sym->st_value = sym->st_value;
-	node_sym->name = name;
-	node_sym->type = ft_symbol_get_type_64(nm, sym, name);
-	if (!node_sym->type)
-	{
-		free(name);
-		free((void *)sym);
-		free(node_sym);
-		return (1);
-	}
-	node_sym->st_shndx = sym->st_shndx;
-	node_sym->visibility = sym->visibility;
-	node_sym->info_type = sym->type;
-	node_sym->bind = sym->bind;
-	ft_list_sym_add_64(nm, node_sym);
+	node_sym = ft_nm_symbol_create_64(nm, sym, name);
 	free((void *)sym);
+	if (!node_sym)
+		return (1);
+	ft_list_sym_add_64(nm, node_sym);
 	return (0);
 }
 

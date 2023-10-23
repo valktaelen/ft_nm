@@ -1,88 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/23 06:51:27 by aartiges          #+#    #+#             */
+/*   Updated: 2023/10/23 06:52:50 by aartiges         ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "header.h"
-
-// u_int8_t	ft_nm_32_old(t_binary_32 *bin)
-// {
-// 	Elf32_Shdr	*section_hdr;
-// 	Elf32_Word	type;
-// 	Elf32_Word	size;
-// 	Elf32_Off	offset;
-// 	Elf32_Half	i;
-// 	u_int8_t	pass;
-
-// 	pass = 1;
-// 	i = 0;
-// 	while (i < swap_uint16(bin->elf_hdr->e_shnum, bin->endian))
-// 	{
-// 		section_hdr = get_n_section_header_32(bin, i);
-// 		type = swap_uint32(section_hdr->sh_type, bin->endian);
-// 		if (type == SHT_SYMTAB || type == SHT_SYMTAB_SHNDX)
-// 		{
-// 			offset = swap_uint32(section_hdr->sh_offset, bin->endian);
-// 			size = swap_uint32(section_hdr->sh_size, bin->endian);
-// 			Elf32_Sym	*sym = bin->file.map + offset;
-// 			while ((void *)sym < bin->file.map + offset + size)
-// 			{
-// 				Elf32_Shdr	*str_section_hdr = get_n_section_header_32(bin, swap_uint32(section_hdr->sh_link, bin->endian));
-// 				if (pass)
-// 					pass = 0;
-// 				else
-// 					print_sym_32(sym, bin->file.map + swap_uint32(str_section_hdr->sh_offset, bin->endian), bin);
-// 				sym = (void *)sym + swap_uint32(section_hdr->sh_entsize, bin->endian);
-// 			}
-// 		}
-// 		++i;
-// 	}
-// 	return (0);
-// }
-
-// u_int8_t	ft_nm_64_old(t_binary_64 *bin)
-// {
-// 	Elf64_Shdr	*section_hdr;
-// 	Elf64_Word	type;
-// 	Elf64_Word	size;
-// 	Elf64_Off	offset;
-// 	Elf64_Half	i;
-// 	u_int8_t	pass;
-
-// 	i = 0;
-// 	pass = 1;
-// 	while (i < swap_uint16(bin->elf_hdr->e_shnum, bin->endian))
-// 	{
-// 		section_hdr = get_n_section_header_64(bin, i);
-// 		type = swap_uint32(section_hdr->sh_type, bin->endian);
-// 		if (type == SHT_SYMTAB || type == SHT_SYMTAB_SHNDX)
-// 		{
-// 			offset = swap_uint64(section_hdr->sh_offset, bin->endian);
-// 			size = swap_uint64(section_hdr->sh_size, bin->endian);
-// 			Elf64_Sym	*sym = bin->file.map + offset;
-// 			while ((void *)sym < bin->file.map + offset + size)
-// 			{
-// 				Elf64_Shdr	*str_section_hdr = get_n_section_header_64(bin, swap_uint32(section_hdr->sh_link, bin->endian));
-// 				if (pass)
-// 					pass = 0;
-// 				else
-// 					print_sym_64(sym, bin->file.map + swap_uint64(str_section_hdr->sh_offset, bin->endian), bin);
-// 				sym = (void *)sym + swap_uint64(section_hdr->sh_entsize, bin->endian);
-// 			}
-// 		}
-// 		++i;
-// 	}
-// 	return (0);
-// }
-
-
-
-
-// int	ft_nm_32(t_nm *nm)
-// {
-// 	return (0);
-// }
-
-
-// void	ft_print_32(t_nm *nm, int index)
-// {
-
-// }
 
 void	ft_clean_nm(t_nm *nm)
 {
@@ -136,7 +64,7 @@ int	ft_nm(t_nm *nm, int index)
 	return (ret);
 }
 
-int main(const int argc, char *argv[])
+int	main(const int argc, char *argv[])
 {
 	t_nm		nm;
 	int			i;

@@ -1,10 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   struct.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/23 06:52:33 by aartiges          #+#    #+#             */
+/*   Updated: 2023/10/23 06:52:34 by aartiges         ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef STRUCT_H
 
 # define STRUCT_H
 
 # include <sys/types.h>
 # include <elf.h>
-
 
 /*******************************************/
 /**************** 64-bits ******************/
@@ -20,7 +31,7 @@ typedef struct s_symbol_64
 	u_int8_t			info_type;
 	u_int8_t			bind;
 	struct s_symbol_64	*next;
-} t_symbol_64;
+}	t_symbol_64;
 
 typedef struct s_Sym_64
 {
@@ -33,7 +44,7 @@ typedef struct s_Sym_64
 	u_int8_t		visibility;
 	u_int8_t		type;
 	u_int8_t		bind;
-} t_Sym_64;
+}	t_Sym_64;
 
 typedef struct s_S_hdr_64
 {
@@ -45,7 +56,7 @@ typedef struct s_S_hdr_64
 	Elf64_Word	sh_link;
 	Elf64_Word	sh_info;
 	Elf64_Xword	sh_entsize;
-} t_S_hdr_64;
+}	t_S_hdr_64;
 
 typedef struct s_binary_64 {
 	Elf64_Off	e_shoff;
@@ -55,7 +66,6 @@ typedef struct s_binary_64 {
 	Elf64_Shdr	*hdrs;
 	t_symbol_64	*syms;
 }	t_binary_64;
-
 
 /*******************************************/
 /**************** 32-bits ******************/
@@ -71,7 +81,7 @@ typedef struct s_symbol_32
 	u_int8_t			info_type;
 	u_int8_t			bind;
 	struct s_symbol_32	*next;
-} t_symbol_32;
+}	t_symbol_32;
 
 typedef struct s_Sym_32
 {
@@ -84,7 +94,7 @@ typedef struct s_Sym_32
 	u_int8_t		visibility;
 	u_int8_t		type;
 	u_int8_t		bind;
-} t_Sym_32;
+}	t_Sym_32;
 
 typedef struct s_S_hdr_32
 {
@@ -96,7 +106,7 @@ typedef struct s_S_hdr_32
 	Elf32_Word	sh_link;
 	Elf32_Word	sh_info;
 	Elf32_Word	sh_entsize;
-} t_S_hdr_32;
+}	t_S_hdr_32;
 
 typedef struct s_binary_32 {
 	Elf32_Off	e_shoff;
@@ -106,7 +116,6 @@ typedef struct s_binary_32 {
 	Elf32_Shdr	*hdrs;
 	t_symbol_32	*syms;
 }	t_binary_32;
-
 
 /*******************************************/
 /**************** General ******************/
@@ -119,17 +128,15 @@ typedef struct s_global_infos
 	void		*map;
 }	t_global_infos;
 
-
-
 typedef struct s_nm
 {
-	char *		prg_name;
-	char *		file_path;
-	size_t		file_size;
-	int			fd;
+	char			*prg_name;
+	char			*file_path;
+	size_t			file_size;
+	int				fd;
 	t_global_infos	global_infos;
-	t_binary_32	bin_32;
-	t_binary_64	bin_64;
+	t_binary_32		bin_32;
+	t_binary_64		bin_64;
 }	t_nm;
 
 #endif

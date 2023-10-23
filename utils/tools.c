@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tools.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/23 06:52:38 by aartiges          #+#    #+#             */
+/*   Updated: 2023/10/23 06:52:40 by aartiges         ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "utils.h"
 
-size_t	ft_strlen(char * str)
+size_t	ft_strlen(char *str)
 {
 	char	*s;
 
@@ -70,5 +82,5 @@ char	get_char_lower_upper(char lower_letter, u_int8_t to_upper)
 {
 	if (to_upper)
 		lower_letter += 'A' - 'a';
-	return lower_letter;
+	return (lower_letter);
 }

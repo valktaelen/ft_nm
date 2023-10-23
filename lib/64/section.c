@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   section.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/23 06:52:16 by aartiges          #+#    #+#             */
+/*   Updated: 2023/10/23 06:57:25 by aartiges         ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../lib.h"
 
 void	*ft_get_section_content_64(
@@ -20,7 +32,7 @@ void	*ft_get_section_content_64(
 t_S_hdr_64	*ft_get_section_64(t_nm *nm, Elf64_Shdr *map_hdr)
 {
 	const u_int8_t	endian = nm->global_infos.endian;
-	t_S_hdr_64	*hdr;
+	t_S_hdr_64		*hdr;
 
 	hdr = malloc(sizeof(t_S_hdr_64));
 	if (!hdr)

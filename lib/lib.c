@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lib.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/23 06:52:22 by aartiges          #+#    #+#             */
+/*   Updated: 2023/10/23 06:53:31 by aartiges         ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "lib.h"
 
 int	ft_get_global_infos(t_nm *nm)
@@ -10,9 +22,9 @@ int	ft_get_global_infos(t_nm *nm)
 	nm->global_infos.endian = elf_hdr->e_ident[EI_DATA];
 	nm->global_infos.arch = elf_hdr->e_ident[EI_CLASS];
 	if (!(nm->global_infos.endian == FT_LITTLE_ENDIAN
-		|| nm->global_infos.endian == FT_BIG_ENDIAN)
+			|| nm->global_infos.endian == FT_BIG_ENDIAN)
 		|| !(nm->global_infos.arch == FT_32
-		|| nm->global_infos.arch == FT_64)
+			|| nm->global_infos.arch == FT_64)
 		|| !(elf_hdr->e_ident[EI_MAG0] == ELFMAG0
 			&& elf_hdr->e_ident[EI_MAG1] == ELFMAG1
 			&& elf_hdr->e_ident[EI_MAG2] == ELFMAG2

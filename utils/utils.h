@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/23 06:52:41 by aartiges          #+#    #+#             */
+/*   Updated: 2023/10/23 06:52:44 by aartiges         ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef UTILS_H
 
 # define UTILS_H
@@ -63,25 +75,24 @@
 
 # define INFO_NO_SYM			"No symbols"
 
-
 /**************************************/
 /***********  PROTOTYPES  *************/
 /**************************************/
 
 // tools
-size_t	ft_strlen(char * str);
-int	ft_strncmp(char *s1, char *s2, const size_t n);
-void	print_prg_error(t_nm *nm, char *error);
-char	*ft_strdup(char *str);
-void	print_number_n_digit(Elf64_Addr n, size_t digit);
-char	get_char_lower_upper(char lower_letter, u_int8_t to_upper);
+size_t		ft_strlen(char *str);
+int			ft_strncmp(char *s1, char *s2, const size_t n);
+void		print_prg_error(t_nm *nm, char *error);
+char		*ft_strdup(char *str);
+void		print_number_n_digit(Elf64_Addr n, size_t digit);
+char		get_char_lower_upper(char lower_letter, u_int8_t to_upper);
 
 // file
-int		ft_check_file(t_nm *nm);
-int		ft_get_fd(t_nm *nm);
+int			ft_check_file(t_nm *nm);
+int			ft_get_fd(t_nm *nm);
 
 // memory
-void	*ft_get_map(t_nm *nm, size_t len, off_t offset);
+void		*ft_get_map(t_nm *nm, size_t len, off_t offset);
 
 // swap bits
 u_int8_t	which_endian(void);

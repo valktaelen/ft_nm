@@ -1,4 +1,36 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   print.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/10/23 06:51:33 by aartiges          #+#    #+#             */
+/*   Updated: 2023/10/23 07:26:05 by aartiges         ###   ########lyon.fr   */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../lib.h"
+
+static void	ft_print_one_32(t_symbol_32 *sym)
+{
+	if (sym->type != 'U' && sym->type != 'w')
+		print_number_n_digit(sym->st_value, 8);
+	else if (
+		(sym->info_type == STT_NOTYPE
+			&& sym->bind == STB_LOCAL
+			&& sym->visibility == STV_DEFAULT
+			&& sym->st_shndx == SHN_UNDEF)
+		|| sym->st_shndx == SHN_ABS || sym->info_type == STT_SECTION)
+		print_number_n_digit(0, 8);
+	else
+		write(1, "        ", 8);
+	write(1, SEP_SPACE, 1);
+	write(1, &sym->type, 1);
+	write(1, SEP_SPACE, 1);
+	write(1, sym->name, ft_strlen(sym->name));
+	write(1, SEP_NL, 1);
+}
 
 void	ft_print_32(t_nm *nm, int index)
 {
@@ -19,19 +51,7 @@ void	ft_print_32(t_nm *nm, int index)
 	}
 	while (sym)
 	{
-		if (sym->type != 'U' && sym->type != 'w')
-			print_number_n_digit(sym->st_value, 8);
-		else if (
-			(sym->info_type == STT_NOTYPE && sym->bind == STB_LOCAL && sym->visibility == STV_DEFAULT && sym->st_shndx == SHN_UNDEF)
-			|| sym->st_shndx == SHN_ABS || sym->info_type == STT_SECTION)
-			print_number_n_digit(0, 8);
-		else
-			write(1, "        ", 8);
-		write(1, SEP_SPACE, 1);
-		write(1, &sym->type, 1);
-		write(1, SEP_SPACE, 1);
-		write(1, sym->name, ft_strlen(sym->name));
-		write(1, SEP_NL, 1);
+		ft_print_one_32(sym);
 		sym = sym->next;
 	}
 }

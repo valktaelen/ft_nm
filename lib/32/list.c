@@ -6,7 +6,7 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 06:51:53 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/23 06:51:55 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/23 08:27:56 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,16 @@ void	ft_clean_nm_32(t_symbol_32 *syms)
 
 void	ft_list_sym_add_32(t_nm *nm, t_symbol_32 *sym)
 {
+	t_symbol_32	*symbol;
+
+	sym->next = NULL;
 	if (nm->bin_32.syms)
-		sym->next = nm->bin_32.syms;
+	{
+		symbol = nm->bin_32.syms;
+		while (symbol->next)
+			symbol = symbol->next;
+		symbol->next = sym;
+	}
 	else
-		sym->next = NULL;
-	nm->bin_32.syms = sym;
+		nm->bin_32.syms = sym;
 }

@@ -6,7 +6,7 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 06:52:13 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/24 06:00:15 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/24 09:38:59 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,21 @@ void	ft_print_one_64(t_symbol_64 *sym)
 	write(1, SEP_NL, 1);
 }
 
+int	ft_need_print_64(t_nm *nm, t_symbol_64 *sym)
+{
+	int	ret;
+
+	ret = 1;
+	if (!(nm->flags & FLAG_ALL) && (sym->info_type == STT_FILE
+			|| sym->info_type == STT_SECTION))
+		ret = 0;
+	else if ((nm->flags & FLAG_UNDEF) && sym->st_shndx != SHN_UNDEF)
+		ret = 0;
+	else if ((nm->flags & FLAG_EXTERN) && sym->bind == STB_LOCAL)
+		ret = 0;
+	return (ret);
+}
+
 void	ft_print_64(t_nm *nm, int index)
 {
 	t_symbol_64	*sym;
@@ -51,7 +66,8 @@ void	ft_print_64(t_nm *nm, int index)
 	}
 	while (sym)
 	{
-		ft_print_one_64(sym);
+		if (ft_need_print_64(nm, sym))
+			ft_print_one_64(sym);
 		sym = sym->next;
 	}
 }

@@ -6,7 +6,7 @@
 #    By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/23 06:52:52 by aartiges          #+#    #+#              #
-#    Updated: 2023/10/23 06:52:57 by aartiges         ###   ########lyon.fr    #
+#    Updated: 2023/10/23 12:04:32 by aartiges         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,7 @@ SRCS =	main.c 				\
 		utils/memory.c		\
 		utils/swap_bits.c	\
 		utils/tools.c		\
+		utils/sort.c		\
 
 
 OBJS = ${SRCS:.c=.o}

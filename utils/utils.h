@@ -6,7 +6,7 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 06:52:41 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/23 06:52:44 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/23 11:39:57 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,5 +99,7 @@ u_int8_t	which_endian(void);
 uint16_t	swap_uint16(uint16_t val, u_int8_t endian);
 uint32_t	swap_uint32(uint32_t val, u_int8_t endian);
 uint64_t	swap_uint64(uint64_t val, u_int8_t endian);
+
+int			ft_sort_string_symbol(char *s1, char *s2);
 
 #endif

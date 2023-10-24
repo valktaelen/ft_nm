@@ -6,7 +6,7 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 06:52:41 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/24 08:30:35 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/24 10:30:40 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,6 @@
 # include <stdlib.h>
 
 # include "struct.h"
-
-// TODO rm
-#include <stdio.h>
-#include <string.h>
 
 /**************************************/
 /*************  DEFINES  **************/
@@ -79,6 +75,7 @@
 
 # define ERR_MAP_FAIL			"map failed"
 # define ERR_MALLOC				"malloc failed"
+# define ERR_INV_OPTION			"invalid option"
 
 # define INFO_NO_SYM			"No symbols"
 
@@ -89,6 +86,7 @@
 // tools
 size_t		ft_strlen(char *str);
 int			ft_strncmp(char *s1, char *s2, const size_t n);
+void		print_parsing_error(t_nm *nm, char *error, char *val);
 void		print_prg_error(t_nm *nm, char *error);
 char		*ft_strdup(char *str);
 void		print_number_n_digit(Elf64_Addr n, size_t digit);
@@ -100,6 +98,10 @@ int			ft_get_fd(t_nm *nm);
 
 // memory
 void		*ft_get_map(t_nm *nm, size_t len, off_t offset);
+t_Sym_64	*ft_get_symbol_64(t_nm *nm, Elf64_Sym *map_sym);
+t_Sym_32	*ft_get_symbol_32(t_nm *nm, Elf32_Sym *map_sym);
+t_S_hdr_64	*ft_get_section_64(t_nm *nm, Elf64_Shdr *map_hdr);
+t_S_hdr_32	*ft_get_section_32(t_nm *nm, Elf32_Shdr *map_hdr);
 
 // swap bits
 u_int8_t	which_endian(void);

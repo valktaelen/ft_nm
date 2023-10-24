@@ -6,34 +6,11 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 06:52:01 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/24 06:35:53 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/24 10:26:15 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../lib.h"
-
-t_Sym_32	*ft_get_symbol_32(t_nm *nm, Elf32_Sym *map_sym)
-{
-	const u_int8_t	endian = nm->global_infos.endian;
-	t_Sym_32		*sym;
-
-	sym = malloc(sizeof(t_Sym_32));
-	if (!sym)
-	{
-		print_prg_error(nm, ERR_MALLOC);
-		return (NULL);
-	}
-	sym->st_name = swap_uint32(map_sym->st_name, endian);
-	sym->st_info = map_sym->st_info;
-	sym->st_other = map_sym->st_other;
-	sym->st_shndx = swap_uint16(map_sym->st_shndx, endian);
-	sym->st_value = swap_uint32(map_sym->st_value, endian);
-	sym->st_size = swap_uint32(map_sym->st_size, endian);
-	sym->visibility = ELF32_ST_VISIBILITY(sym->st_other);
-	sym->type = ELF32_ST_TYPE(sym->st_info);
-	sym->bind = ELF32_ST_BIND(sym->st_info);
-	return (sym);
-}
 
 static char	*ft_symbol_get_name_section_32(t_nm *nm,
 	const t_Sym_32 *sym,

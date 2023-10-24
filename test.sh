@@ -12,7 +12,7 @@ find "$1" -type f -exec sh -c '
     base_name="diff/$(basename "$file")"
 
     # Exécution de la commande sur le fichier et redirection de la sortie vers le fichier de sortie
-    ./a.out "$file" | sort > "$base_name.1"
-    nm -a "$file" | sort > "$base_name.2"
+    ./a.out "$file" > "$base_name.1"
+    nm "$file" > "$base_name.2"
   done
 ' sh {} +

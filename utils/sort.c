@@ -6,7 +6,7 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 07:59:59 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/24 08:15:42 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/24 10:34:52 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,22 +21,18 @@ static int	ft_cmp_letter(char c1, char c2)
 	return (c1 - c2);
 }
 
-static int	ft_is_letter(char c)
-{
-	return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')
-		|| (c >= '0' && c <= '9'));
-}
-
 static int	ft_strcmp_symbol(char *s1, char *s2)
 {
 	while (*s1 && *s2)
 	{
-		if (!ft_is_letter(*s1))
+		if (!((*s1 >= 'a' && *s1 <= 'z') || (*s1 >= 'A' && *s1 <= 'Z')
+				|| (*s1 >= '0' && *s1 <= '9')))
 		{
 			++s1;
 			continue ;
 		}
-		if (!ft_is_letter(*s2))
+		if (!((*s2 >= 'a' && *s2 <= 'z') || (*s2 >= 'A' && *s2 <= 'Z')
+				|| (*s2 >= '0' && *s2 <= '9')))
 		{
 			++s2;
 			continue ;
@@ -63,12 +59,14 @@ int	ft_cmp_case(char *s1, char *s2)
 {
 	while (*s1 && *s2)
 	{
-		if (!ft_is_letter(*s1))
+		if (!((*s1 >= 'a' && *s1 <= 'z') || (*s1 >= 'A' && *s1 <= 'Z')
+				|| (*s1 >= '0' && *s1 <= '9')))
 		{
 			++s1;
 			continue ;
 		}
-		if (!ft_is_letter(*s2))
+		if (!((*s2 >= 'a' && *s2 <= 'z') || (*s2 >= 'A' && *s2 <= 'Z')
+				|| (*s2 >= '0' && *s2 <= '9')))
 		{
 			++s2;
 			continue ;

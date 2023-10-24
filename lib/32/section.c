@@ -6,7 +6,7 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 06:51:58 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/23 06:58:17 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/24 10:30:13 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,23 +27,4 @@ void	*ft_get_section_content_32(
 	if (len == 0)
 		return (NULL);
 	return (nm->global_infos.map + off);
-}
-
-t_S_hdr_32	*ft_get_section_32(t_nm *nm, Elf32_Shdr *map_hdr)
-{
-	const u_int8_t	endian = nm->global_infos.endian;
-	t_S_hdr_32		*hdr;
-
-	hdr = malloc(sizeof(t_S_hdr_32));
-	if (!hdr)
-		return (NULL);
-	hdr->sh_name = swap_uint32(map_hdr->sh_name, endian);
-	hdr->sh_type = swap_uint32(map_hdr->sh_type, endian);
-	hdr->sh_flags = swap_uint32(map_hdr->sh_flags, endian);
-	hdr->sh_offset = swap_uint32(map_hdr->sh_offset, endian);
-	hdr->sh_size = swap_uint32(map_hdr->sh_size, endian);
-	hdr->sh_link = swap_uint32(map_hdr->sh_link, endian);
-	hdr->sh_info = swap_uint32(map_hdr->sh_info, endian);
-	hdr->sh_entsize = swap_uint32(map_hdr->sh_entsize, endian);
-	return (hdr);
 }

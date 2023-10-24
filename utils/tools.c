@@ -6,7 +6,7 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 06:52:38 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/23 06:52:40 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/24 10:32:14 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,6 @@ int	ft_strncmp(char *s1, char *s2, const size_t n)
 		++i;
 	}
 	return (*s1 - *s2);
-}
-
-void	print_prg_error(t_nm *nm, char *error)
-{
-	write(STDERR_FILENO, nm->prg_name, ft_strlen(nm->prg_name));
-	write(STDERR_FILENO, SEP_1, ft_strlen(SEP_1));
-	write(STDERR_FILENO, nm->file_path, ft_strlen(nm->file_path));
-	write(STDERR_FILENO, SEP_1, ft_strlen(SEP_1));
-	write(STDERR_FILENO, error, ft_strlen(error));
-	write(STDERR_FILENO, SEP_NL, ft_strlen(SEP_NL));
 }
 
 char	*ft_strdup(char *str)

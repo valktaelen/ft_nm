@@ -6,7 +6,7 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 07:59:59 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/24 06:35:14 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/24 08:15:42 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,14 +49,36 @@ static int	ft_strcmp_symbol(char *s1, char *s2)
 	return (ft_cmp_letter(*s1, *s2));
 }
 
-static int	ft_strcmp_symbol_prefix(char *s1, char *s2)
+int	ft_strcmp_symbol_prefix(char *s1, char *s2)
 {
-	while (*s1 && *s2 && ft_cmp_letter(*s1, *s2) == 0)
+	while (*s1 && *s2 && *s1 == *s2)
 	{
 		++s1;
 		++s2;
 	}
-	return (ft_cmp_letter(*s1, *s2));
+	return (*s1 - *s2);
+}
+
+int	ft_cmp_case(char *s1, char *s2)
+{
+	while (*s1 && *s2)
+	{
+		if (!ft_is_letter(*s1))
+		{
+			++s1;
+			continue ;
+		}
+		if (!ft_is_letter(*s2))
+		{
+			++s2;
+			continue ;
+		}
+		if (*s1 != *s2)
+			break ;
+		++s1;
+		++s2;
+	}
+	return (*s2 - *s1);
 }
 
 int	ft_sort_string_symbol(char *s1, char *s2)
@@ -65,6 +87,10 @@ int	ft_sort_string_symbol(char *s1, char *s2)
 
 	ret = ft_strcmp_symbol(s1, s2);
 	if (ret == 0)
-		return (ft_strcmp_symbol_prefix(s1, s2));
+	{
+		ret = ft_cmp_case(s1, s2);
+		if (ret == 0)
+			ret = (ft_strcmp_symbol_prefix(s1, s2));
+	}
 	return (ret);
 }

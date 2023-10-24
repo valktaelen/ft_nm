@@ -6,7 +6,7 @@
 #    By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/10/23 06:52:52 by aartiges          #+#    #+#              #
-#    Updated: 2023/10/24 10:32:27 by aartiges         ###   ########lyon.fr    #
+#    Updated: 2023/10/24 10:38:26 by aartiges         ###   ########lyon.fr    #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,7 +40,7 @@ HEADERS =	header.h		\
 			lib/lib.h	\
 
 
-NAME = a.out
+NAME = ft_nm
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
 RM = rm -rf
@@ -49,6 +49,7 @@ RM = rm -rf
 	@${CC} ${CFLAGS} -c $< -o $@
 
 all: 		${NAME}
+bonus: 		${NAME}
 
 $(NAME):	$(OBJS)
 			@$(CC) $(CFLAGS) -o $(NAME) $(OBJS)

@@ -6,7 +6,7 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 06:52:41 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/23 11:39:57 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/24 08:30:35 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,13 @@
 
 # define FT_32 1
 # define FT_64 2
+
+# define FLAG_NO		0b00000000
+# define FLAG_ALL		0b00000001 //-a
+# define FLAG_UNDEF		0b00000010 //-u
+# define FLAG_EXTERN	0b00000100 //-g
+# define FLAG_REVERSE	0b00001000 //-r
+# define FLAG_NO_SORT	0b00010000 //-p
 
 // errors
 # define ERR_FILE_RECONIZED		"file format not reconized"

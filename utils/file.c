@@ -6,7 +6,7 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 06:52:27 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/23 06:52:29 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/24 10:40:13 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	ft_check_file(t_nm *nm)
 		else if (errno == ENAMETOOLONG)
 			print_prg_error(nm, ERR_FILE_PATH_LONG);
 		else if (errno == ENOENT)
-			print_prg_error(nm, ERR_FILE_PATH_LONG);
+			print_prg_error(nm, ERR_FILE_NO_EXIST);
 		else
 			print_prg_error(nm, ERR_FILE_NO_EXIST);
 		return (1);

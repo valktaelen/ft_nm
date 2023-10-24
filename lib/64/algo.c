@@ -6,7 +6,7 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 06:52:04 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/23 07:36:24 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/23 12:08:12 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,5 +108,6 @@ int	ft_nm_64(t_nm *nm)
 		++i_section;
 	}
 	nm->bin_64.hdrs = NULL;
+	ft_list_sort_64(nm);
 	return (0);
 }

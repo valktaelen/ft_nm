@@ -6,7 +6,7 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 06:52:01 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/23 07:23:35 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/24 06:35:43 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,8 @@ static char	ft_symbol_get_type_link_algo_64(
 		&& ft_strncmp(name, DEBUG_SECTION, ft_strlen(DEBUG_SECTION)) == 0)
 		return (get_char_lower_upper('N', 0));
 	else if ((sh_type == SHT_PROGBITS || sh_type == SHT_INIT_ARRAY
-			|| sh_type == SHT_FINI_ARRAY || sh_type == SHT_DYNAMIC)
+			|| sh_type == SHT_FINI_ARRAY || sh_type == SHT_DYNAMIC
+			|| sh_type == SHT_PREINIT_ARRAY)
 		&& ((sh_flags & (SHF_WRITE | SHF_ALLOC)) == (SHF_WRITE | SHF_ALLOC)))
 		return (get_char_lower_upper('d', sym->bind == STB_GLOBAL));
 	else if (sh_flags & SHF_ALLOC)

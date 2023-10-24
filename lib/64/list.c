@@ -6,7 +6,7 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 06:52:10 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/23 08:28:23 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/24 05:40:37 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,59 @@ void	ft_list_sym_add_64(t_nm *nm, t_symbol_64 *sym)
 	}
 	else
 		nm->bin_64.syms = sym;
+}
+
+size_t	ft_list_size_64(t_symbol_64 *lst)
+{
+	size_t	i;
+
+	i = 0;
+	while (lst)
+	{
+		++i;
+		lst = lst->next;
+	}
+	return (i);
+}
+
+static void	ft_switch_64(
+	t_nm *nm,
+	t_symbol_64 **current,
+	t_symbol_64 **prev,
+	t_symbol_64 **old
+)
+{
+	(*prev)->next = (*current)->next;
+	(*current)->next = *prev;
+	if ((*prev) == nm->bin_64.syms)
+		nm->bin_64.syms = (*current);
+	else
+		(*old)->next = (*current);
+	(*prev) = *current;
+	*current = (*prev)->next;
+}
+
+void	ft_list_sort_64(t_nm *nm)
+{
+	const size_t	len = ft_list_size_64(nm->bin_64.syms);
+	t_symbol_64		*prev;
+	t_symbol_64		*current;
+	t_symbol_64		*old;
+	size_t			i;
+
+	i = 0;
+	while (i < len)
+	{
+		prev = nm->bin_64.syms;
+		current = prev->next;
+		while (current)
+		{
+			if (ft_sort_string_symbol(prev->name, current->name) > 0)
+				ft_switch_64(nm, &current, &prev, &old);
+			old = prev;
+			prev = current;
+			current = current->next;
+		}
+		++i;
+	}
 }

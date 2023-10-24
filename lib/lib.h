@@ -6,7 +6,7 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 06:51:18 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/23 06:51:24 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/23 12:19:25 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,9 @@ void		*ft_get_section_content_64(
 t_S_hdr_64	*ft_get_section_64(t_nm *nm, Elf64_Shdr *map_hdr);
 void		ft_clean_nm_64(t_symbol_64 *syms);
 void		ft_list_sym_add_64(t_nm *nm, t_symbol_64 *sym);
+size_t		ft_list_size_64(t_symbol_64 *lst);
+void		ft_list_sort_64(t_nm *nm);
+
 t_Sym_64	*ft_get_symbol_64(t_nm *nm, Elf64_Sym *map_sym);
 char		ft_symbol_get_type_64(t_nm *nm, const t_Sym_64 *sym, char *name);
 char		*ft_symbol_get_name_64(
@@ -65,6 +68,8 @@ void		*ft_get_section_content_32(
 t_S_hdr_32	*ft_get_section_32(t_nm *nm, Elf32_Shdr *map_hdr);
 void		ft_clean_nm_32(t_symbol_32 *syms);
 void		ft_list_sym_add_32(t_nm *nm, t_symbol_32 *sym);
+size_t		ft_list_size_32(t_symbol_32 *lst);
+void		ft_list_sort_32(t_nm *nm);
 t_Sym_32	*ft_get_symbol_32(t_nm *nm, Elf32_Sym *map_sym);
 char		ft_symbol_get_type_32(t_nm *nm, const t_Sym_32 *sym, char *name);
 char		*ft_symbol_get_name_32(

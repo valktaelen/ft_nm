@@ -6,7 +6,7 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 06:51:27 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/23 06:52:50 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/23 12:08:03 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,15 +49,14 @@ int	ft_nm(t_nm *nm, int index)
 	if (ret)
 		return (1);
 	if (nm->global_infos.arch == FT_64)
-	{
 		ret = ft_nm_64(nm);
-		if (!ret)
-			ft_print_64(nm, index);
-	}
 	else
-	{
 		ret = ft_nm_32(nm);
-		if (!ret)
+	if (!ret)
+	{
+		if (nm->global_infos.arch == FT_64)
+			ft_print_64(nm, index);
+		else
 			ft_print_32(nm, index);
 	}
 	munmap(nm->global_infos.map, nm->file_size);

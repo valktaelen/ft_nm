@@ -6,7 +6,7 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 06:51:53 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/24 05:40:33 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/24 09:33:28 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,13 +79,17 @@ void	ft_list_sort_32(t_nm *nm)
 	size_t			i;
 
 	i = 0;
-	while (i < len)
+	while (!(nm->flags & FLAG_NO_SORT) && i < len)
 	{
 		prev = nm->bin_32.syms;
 		current = prev->next;
 		while (current)
 		{
-			if (ft_sort_string_symbol(prev->name, current->name) > 0)
+			if (!(nm->flags & FLAG_REVERSE)
+				&& ft_sort_string_symbol(prev->name, current->name) > 0)
+				ft_switch_32(nm, &current, &prev, &old);
+			else if ((nm->flags & FLAG_REVERSE)
+				&& ft_sort_string_symbol(prev->name, current->name) < 0)
 				ft_switch_32(nm, &current, &prev, &old);
 			old = prev;
 			prev = current;

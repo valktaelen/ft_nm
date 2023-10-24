@@ -6,7 +6,7 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 06:51:27 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/23 12:08:03 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/24 10:25:23 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,55 @@ int	ft_nm(t_nm *nm, int index)
 	return (ret);
 }
 
+int	get_flag(char *arg)
+{
+	char	c;
+
+	if (ft_strlen(arg) != 2)
+		return (FLAG_NO);
+	c = arg[1];
+	if (c == 'a')
+		return (FLAG_ALL);
+	if (c == 'r')
+		return (FLAG_REVERSE);
+	if (c == 'g')
+		return (FLAG_EXTERN);
+	if (c == 'p')
+		return (FLAG_NO_SORT);
+	if (c == 'u')
+		return (FLAG_UNDEF);
+	return (FLAG_NO);
+}
+
+int	ft_init_prg(const int argc, char **argv, t_nm *nm)
+{
+	u_int8_t	tmp;
+	int			i;
+
+	nm->bin_64.syms = NULL;
+	nm->bin_32.syms = NULL;
+	nm->flags = FLAG_NO;
+	nm->nb_file = 0;
+	i = 1;
+	while (i < argc)
+	{
+		if (argv[i][0] == '-')
+		{
+			tmp = get_flag(argv[i]);
+			if (tmp == FLAG_NO)
+			{
+				print_parsing_error(nm, ERR_INV_OPTION, argv[i] + 1);
+				return (1);
+			}
+			nm->flags |= tmp;
+		}
+		else
+			nm->nb_file += 1;
+		++i;
+	}
+	return (0);
+}
+
 int	main(const int argc, char *argv[])
 {
 	t_nm		nm;
@@ -70,20 +119,20 @@ int	main(const int argc, char *argv[])
 	int			ret;
 
 	nm.prg_name = argv[0];
-	nm.bin_64.syms = NULL;
-	nm.bin_32.syms = NULL;
-	if (argc == 1)
+	if (ft_init_prg(argc, argv, &nm))
+		return (1);
+	if (!nm.nb_file)
 	{
 		nm.file_path = DEFAULT_PRG;
 		ret = ft_nm(&nm, 0);
 	}
 	else
 	{
-		i = 0;
-		while (i < argc - 1)
+		i = 1;
+		while (i < argc)
 		{
-			nm.file_path = argv[i + 1];
-			if (ft_nm(&nm, i + 1 - (argc == 2)))
+			nm.file_path = argv[i];
+			if (nm.file_path[0] != '-' && ft_nm(&nm, i - (argc == 2)))
 				ret = 1;
 			++i;
 		}

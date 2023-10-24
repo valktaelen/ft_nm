@@ -6,7 +6,7 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 07:59:59 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/24 10:34:52 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/24 23:31:02 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,13 @@ static int	ft_strcmp_symbol(char *s1, char *s2)
 {
 	while (*s1 && *s2)
 	{
-		if (!((*s1 >= 'a' && *s1 <= 'z') || (*s1 >= 'A' && *s1 <= 'Z')
+		while (*s1 && !((*s1 >= 'a' && *s1 <= 'z') || (*s1 >= 'A' && *s1 <= 'Z')
 				|| (*s1 >= '0' && *s1 <= '9')))
-		{
 			++s1;
-			continue ;
-		}
-		if (!((*s2 >= 'a' && *s2 <= 'z') || (*s2 >= 'A' && *s2 <= 'Z')
+		while (*s2 && !((*s2 >= 'a' && *s2 <= 'z') || (*s2 >= 'A' && *s2 <= 'Z')
 				|| (*s2 >= '0' && *s2 <= '9')))
-		{
 			++s2;
-			continue ;
-		}
-		if (ft_cmp_letter(*s1, *s2))
+		if (!*s1 || !*s2 || ft_cmp_letter(*s1, *s2))
 			break ;
 		++s1;
 		++s2;
@@ -59,19 +53,13 @@ int	ft_cmp_case(char *s1, char *s2)
 {
 	while (*s1 && *s2)
 	{
-		if (!((*s1 >= 'a' && *s1 <= 'z') || (*s1 >= 'A' && *s1 <= 'Z')
+		while (*s1 && !((*s1 >= 'a' && *s1 <= 'z') || (*s1 >= 'A' && *s1 <= 'Z')
 				|| (*s1 >= '0' && *s1 <= '9')))
-		{
 			++s1;
-			continue ;
-		}
-		if (!((*s2 >= 'a' && *s2 <= 'z') || (*s2 >= 'A' && *s2 <= 'Z')
+		while (*s2 && !((*s2 >= 'a' && *s2 <= 'z') || (*s2 >= 'A' && *s2 <= 'Z')
 				|| (*s2 >= '0' && *s2 <= '9')))
-		{
 			++s2;
-			continue ;
-		}
-		if (*s1 != *s2)
+		if (!*s1 || !*s2 || *s1 != *s2)
 			break ;
 		++s1;
 		++s2;

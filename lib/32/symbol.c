@@ -6,7 +6,7 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 06:52:01 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/24 10:26:15 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/24 14:46:24 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ static char	ft_symbol_get_type_link_algo_32(
 	else if (sym->type == STT_SECTION && (sh_type == SHT_SYMTAB
 			|| sh_type == SHT_STRTAB))
 		return (get_char_lower_upper('a', sym->bind == STB_GLOBAL));
-	else if (sym->type == STT_SECTION)
+	else if (sym->type == STT_SECTION || sh_flags == 0)
 		return (get_char_lower_upper('n', 0));
 	return ('?');
 }

@@ -1,18 +1,41 @@
 #!/bin/bash
 
-# La commande que vous souhaitez exécuter sur chaque fichier
-command_to_run="votre_commande"
+if [ $# -ne 2 ]; then
+	echo "Usage: $0 <répertoire> <valeur_de_$2>"
+	exit 1
+fi
 
-# L'extension que vous souhaitez ajouter aux fichiers de sortie
-output_extension=".txt"
+directory="$1"
+value="$2"
 
-# Utilisation de find pour parcourir le répertoire et xargs pour exécuter la commande
-find "$1" -type f -exec sh -c '
-  for file; do
-    base_name="diff/$(basename "$file")"
+rm diff/*
 
-    # Exécution de la commande sur le fichier et redirection de la sortie vers le fichier de sortie
-    ./a.out "$file" > "$base_name.1"
-    nm "$file" > "$base_name.2"
-  done
-' sh {} +
+find "$directory" -type f -print0 | while IFS= read -r -d $'\0' file; do
+	base_name="diff/$(basename "$file")"
+	nm_ok=1
+	ft_nm_ok=1
+
+	./ft_nm $value "$file" >/tmp/test1 2>/tmp/test2
+	if [ $? -eq 0 ]; then
+		mv /tmp/test1 "$base_name.1"
+	else
+		mv /tmp/test2 "$base_name.1_error"
+		ft_nm_ok=0
+	fi
+
+	nm $value "$file" >/tmp/test1 2>/tmp/test2
+	if [ $? -eq 0 ]; then
+		mv /tmp/test1 "$base_name.2"
+	else
+		mv /tmp/test2 "$base_name.2_error"
+		nm_ok=0
+	fi
+
+	diff "$base_name.1"  "$base_name.2" &>/dev/null
+	if [ $? -ne 0 ]; then
+		if [ $ft_nm_ok -ne 0 ] && [ $nm_ok -ne 0 ]; then
+			echo "$base_name" KO
+		fi
+	fi
+done
+

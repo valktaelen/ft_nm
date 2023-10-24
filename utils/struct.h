@@ -6,7 +6,7 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 06:52:33 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/23 06:52:34 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/24 06:43:39 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ typedef struct s_nm
 	t_global_infos	global_infos;
 	t_binary_32		bin_32;
 	t_binary_64		bin_64;
+	u_int8_t		flags;
 }	t_nm;
 
 #endif

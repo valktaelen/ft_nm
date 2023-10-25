@@ -51,7 +51,7 @@ char	*ft_symbol_get_name_64(t_nm *nm, const t_S_hdr_64 *hdr,
 		return (ft_symbol_get_name_section_64(nm, sym, str_tab));
 	return (str_tab + sym->st_name);
 }
-
+#include <stdio.h>
 static char	ft_symbol_get_type_link_algo_64(
 	const t_Sym_64 *sym,
 	char *name,
@@ -127,5 +127,7 @@ char	ft_symbol_get_type_64(t_nm *nm, const t_Sym_64 *sym, char *name)
 	}
 	else if (sym->st_shndx == SHN_UNDEF)
 		c = 'U';
+	else if (sym->st_shndx == SHN_COMMON)
+		c = 'C';
 	return (c);
 }

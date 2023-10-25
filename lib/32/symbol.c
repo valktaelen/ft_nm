@@ -127,5 +127,7 @@ char	ft_symbol_get_type_32(t_nm *nm, const t_Sym_32 *sym, char *name)
 	}
 	else if (sym->st_shndx == SHN_UNDEF)
 		c = 'U';
+	else if (sym->st_shndx == SHN_COMMON)
+		c = 'C';
 	return (c);
 }

@@ -23,6 +23,14 @@ static int	ft_cmp_letter(char c1, char c2)
 
 static int	ft_strcmp_symbol(char *s1, char *s2)
 {
+	if (*s1 == '%')
+		++s1;
+	if (*s2 == '%')
+		++s2;
+	if (*s1 == '$' && (*s2 != '$' && *s2 != 0))
+		return (-1);
+	if ((*s1 != '$' && *s1 != 0) && *s2 == '$')
+		return (1);
 	while (*s1 && *s2)
 	{
 		while (*s1 && !((*s1 >= 'a' && *s1 <= 'z') || (*s1 >= 'A' && *s1 <= 'Z')
@@ -45,22 +53,6 @@ int	ft_strcmp_symbol_prefix(char *s1, char *s2)
 	{
 		++s1;
 		++s2;
-	}
-	if (!((*s2 >= 'a' && *s2 <= 'z') || (*s2 >= 'A' && *s2 <= 'Z'))
-		|| (*s2 >= '0' && *s2 <= '9'))
-	{
-		if (*s1 >= 'A' && *s1 <= 'Z')
-			return (*s1 - (*s2 - ('A' - 'a')));
-		if (*s1 >= '0' && *s1 <= '9')
-			return (*s2 - *s1);
-	}
-	if (!((*s1 >= 'a' && *s1 <= 'z') || (*s1 >= 'A' && *s1 <= 'Z'))
-		|| (*s1 >= '0' && *s1 <= '9'))
-	{
-		if (*s2 >= 'A' && *s2 <= 'Z')
-			return (*s1 - (*s2 - ('A' - 'a')));
-		if (*s2 >= '0' && *s2 <= '9')
-			return (*s2 - *s1);
 	}
 	return (*s1 - *s2);
 }

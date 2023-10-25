@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ $# -ne 2 ]; then
-	echo "Usage: $0 <répertoire> <valeur_de_$2>"
+	echo "Usage: $0 <répertoire> <flags>"
 	exit 1
 fi
 

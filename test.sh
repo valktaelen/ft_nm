@@ -8,10 +8,14 @@ fi
 directory="$1"
 value="$2"
 
-rm diff/*
+rm -r diff
+mkdir diff
 
-find "$directory" -type f -print0 | while IFS= read -r -d $'\0' file; do
-	base_name="diff/$(basename "$file")"
+find "$directory" -type d -name .git -prune -o -type f -print0 | while IFS= read -r -d $'\0' file; do
+	relative_path=$(echo "$file" | cut -c$((${#directory}+1))-)
+	dir_path=$(dirname "$relative_path")
+	mkdir -p diff/$dir_path
+	base_name="diff/$relative_path"
 	nm_ok=1
 	ft_nm_ok=1
 

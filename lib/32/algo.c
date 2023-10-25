@@ -50,10 +50,8 @@ int	ft_nm_symbol_32(t_nm *nm, const t_S_hdr_32 *hdr, Elf32_Sym *map_sym)
 	if (!sym)
 		return (1);
 	name = ft_symbol_get_name_32(nm, hdr, sym);
-	if (!name)
-		return (1);
-	if (!name || (sym->st_size == 0 && sym->st_info == 0 && sym->st_name == 0
-			&& sym->st_other == 0 && sym->st_value == 0 && sym->st_shndx == 0))
+	if (!name || (sym->st_name == 0
+			&& sym->st_value == 0))
 	{
 		free((void *)sym);
 		return (0);

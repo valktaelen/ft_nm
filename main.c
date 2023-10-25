@@ -6,7 +6,7 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 06:51:27 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/24 14:45:05 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/25 13:34:36 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ int	main(const int argc, char *argv[])
 		{
 			tmp = ft_nm(&nm, nm.nb_file > 1);
 			if (tmp)
-				ret = 1;
+				++ret;
 		}
 		++i;
 	}

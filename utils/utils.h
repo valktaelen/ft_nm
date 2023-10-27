@@ -6,7 +6,7 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 06:52:41 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/24 10:30:40 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/27 16:32:18 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@
 // constants
 # define DEFAULT_PRG		"a.out"
 # define DEBUG_SECTION		".debug"
+# define RO_SECTION			".rodata"
 
 # define FT_LITTLE_ENDIAN	1
 # define FT_BIG_ENDIAN		2

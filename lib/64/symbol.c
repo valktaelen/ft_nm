@@ -6,7 +6,7 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 06:52:01 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/25 09:07:40 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/27 16:29:22 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ static char	ft_symbol_get_type_link_algo_64(
 	const t_Sym_64 *sym,
 	char *name,
 	u_int64_t sh_flags,
-	u_int64_t sh_type
+	u_int64_t sh_type,
+	char *name_section
 )
 {
 	if (sh_type == SHT_NOBITS)
@@ -68,8 +69,8 @@ static char	ft_symbol_get_type_link_algo_64(
 	else if (sym->type == STT_SECTION
 		&& ft_strncmp(name, DEBUG_SECTION, ft_strlen(DEBUG_SECTION)) == 0)
 		return (get_char_lower_upper('N', 0));
-	else if (sym->type == STT_SECTION
-		&& ft_strncmp(name, RO_SECTION, ft_strlen(RO_SECTION)) == 0)
+	else if (sym->type == STT_SECTION && name_section
+		&& ft_strncmp(name_section, RO_SECTION, ft_strlen(RO_SECTION)) == 0)
 		return (get_char_lower_upper('r', sym->bind == STB_GLOBAL));
 	else if ((sh_type == SHT_PROGBITS || sh_type == SHT_INIT_ARRAY
 			|| sh_type == SHT_FINI_ARRAY || sh_type == SHT_DYNAMIC
@@ -95,15 +96,17 @@ static char	ft_symbol_get_type_link_64(
 	const Elf64_Shdr	*hdr = ft_get_section_hdr_64(nm, sym->st_shndx);
 	u_int64_t			sh_flags;
 	u_int64_t			sh_type;
+	char				*name_section;
 
 	if (!hdr)
 	{
 		print_prg_error(nm, ERR_FILE_RECONIZED);
 		return (0);
 	}
+	name_section = ft_get_section_name_64(nm, hdr);
 	sh_flags = swap_uint64(hdr->sh_flags, nm->global_infos.endian);
 	sh_type = swap_uint64(hdr->sh_type, nm->global_infos.endian);
-	return (ft_symbol_get_type_link_algo_64(sym, name, sh_flags, sh_type));
+	return (ft_symbol_get_type_link_algo_64(sym, name, sh_flags, sh_type, name_section));
 }
 
 char	ft_symbol_get_type_64(t_nm *nm, const t_Sym_64 *sym, char *name)

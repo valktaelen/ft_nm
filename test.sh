@@ -19,32 +19,37 @@ find "$directory" -type d -name .git -prune -o -type f -print0 | while IFS= read
 	nm_ok=1
 	ft_nm_ok=1
 
-	./ft_nm $value "$file" >/tmp/test1 2>/tmp/test2
-	if [ $? -eq 0 ]; then
-		mv /tmp/test1 "$base_name.1"
-	else
-		mv /tmp/test2 "$base_name.1_error"
-		ft_nm_ok=0
-	fi
+	echo $file | grep -q -E ".o|.so"
 
-	nm $value "$file" >/tmp/test1 2>/tmp/test2
-	if [ $? -eq 0 ]; then
-		mv /tmp/test1 "$base_name.2"
-	else
-		mv /tmp/test2 "$base_name.2_error"
-		nm_ok=0
-	fi
+	if [ $? -eq 0 ] || [ -x $file ]; then
+		./ft_nm $value "$file" >/tmp/test1 2>/tmp/test2
+		if [ $? -eq 0 ]; then
+			mv /tmp/test1 "$base_name.1"
+		else
+			mv /tmp/test2 "$base_name.1_error"
+			ft_nm_ok=0
+		fi
 
-	if [ $ft_nm_ok -ne $nm_ok ]; then
-		echo "$base_name" not same exit status
-	else
-		diff "$base_name.1"  "$base_name.2" &>/dev/null
-		if [ $? -ne 0 ]; then
-			if [ $ft_nm_ok -ne 0 ] && [ $nm_ok -ne 0 ]; then
-				echo "$base_name" KO
+		nm $value "$file" >/tmp/test1 2>/tmp/test2
+		if [ $? -eq 0 ]; then
+			mv /tmp/test1 "$base_name.2"
+		else
+			mv /tmp/test2 "$base_name.2_error"
+			nm_ok=0
+		fi
+
+		if [ $ft_nm_ok -ne $nm_ok ]; then
+			echo "$base_name" not same exit status
+		else
+			diff "$base_name.1"  "$base_name.2" &>/dev/null
+			if [ $? -ne 0 ]; then
+				if [ $ft_nm_ok -ne 0 ] && [ $nm_ok -ne 0 ]; then
+					echo "$base_name" KO
+				fi
 			fi
 		fi
 	fi
+
 
 done
 

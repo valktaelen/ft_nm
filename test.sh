@@ -8,7 +8,7 @@ fi
 directory="$1"
 value="$2"
 
-rm -r diff
+rm -rf diff
 mkdir diff
 
 find "$directory" -type d -name .git -prune -o -type f -print0 | while IFS= read -r -d $'\0' file; do

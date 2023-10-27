@@ -50,6 +50,9 @@
 # define DEFAULT_PRG		"a.out"
 # define DEBUG_SECTION		".debug"
 # define RO_SECTION			".rodata"
+# define DR_SECTION			".data.rel.ro"
+# define D_SECTION			".data"
+# define BSS_SECTION		".bss"
 
 # define FT_LITTLE_ENDIAN	1
 # define FT_BIG_ENDIAN		2

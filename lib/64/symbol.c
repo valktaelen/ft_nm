@@ -60,18 +60,20 @@ static char	ft_symbol_get_type_link_algo_64(
 	char *name_section
 )
 {
-	if (sh_type == SHT_NOBITS)
-		return (get_char_lower_upper('b', sym->bind == STB_GLOBAL));
-	else if (sh_type == SHT_PROGBITS
+	if ((sh_type == SHT_PROGBITS || sh_type == SHT_NOBITS)
 		&& (sh_flags == (SHF_ALLOC | SHF_EXECINSTR)
 			|| sh_flags == (SHF_ALLOC | SHF_EXECINSTR | SHF_WRITE)))
 		return (get_char_lower_upper('t', sym->bind == STB_GLOBAL));
+	else if (name_section
+		&& ft_strncmp(name_section, RO_SECTION, ft_strlen(RO_SECTION)) == 0)
+		return (get_char_lower_upper('r', sym->bind == STB_GLOBAL));
+	else if (name_section && (ft_strncmp(name_section, D_SECTION, ft_strlen(D_SECTION)) == 0 || ft_strncmp(name_section, DR_SECTION, ft_strlen(DR_SECTION)) == 0))
+		return (get_char_lower_upper('d', sym->bind == STB_GLOBAL));
+	else if (sh_type == SHT_NOBITS)
+		return (get_char_lower_upper('b', sym->bind == STB_GLOBAL));
 	else if (sym->type == STT_SECTION
 		&& ft_strncmp(name, DEBUG_SECTION, ft_strlen(DEBUG_SECTION)) == 0)
 		return (get_char_lower_upper('N', 0));
-	else if (sym->type == STT_SECTION && name_section
-		&& ft_strncmp(name_section, RO_SECTION, ft_strlen(RO_SECTION)) == 0)
-		return (get_char_lower_upper('r', sym->bind == STB_GLOBAL));
 	else if ((sh_type == SHT_PROGBITS || sh_type == SHT_INIT_ARRAY
 			|| sh_type == SHT_FINI_ARRAY || sh_type == SHT_DYNAMIC
 			|| sh_type == SHT_PREINIT_ARRAY)

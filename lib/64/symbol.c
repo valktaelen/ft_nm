@@ -68,6 +68,9 @@ static char	ft_symbol_get_type_link_algo_64(
 	else if (sym->type == STT_SECTION
 		&& ft_strncmp(name, DEBUG_SECTION, ft_strlen(DEBUG_SECTION)) == 0)
 		return (get_char_lower_upper('N', 0));
+	else if (sym->type == STT_SECTION
+		&& ft_strncmp(name, RO_SECTION, ft_strlen(RO_SECTION)) == 0)
+		return (get_char_lower_upper('r', sym->bind == STB_GLOBAL));
 	else if ((sh_type == SHT_PROGBITS || sh_type == SHT_INIT_ARRAY
 			|| sh_type == SHT_FINI_ARRAY || sh_type == SHT_DYNAMIC
 			|| sh_type == SHT_PREINIT_ARRAY)

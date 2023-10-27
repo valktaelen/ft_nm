@@ -6,7 +6,7 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 06:52:01 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/27 15:18:34 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/24 14:46:24 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,42 +83,6 @@ static char	ft_symbol_get_type_link_algo_32(
 	return ('?');
 }
 
-char	ft_get_type_by_segment_32(t_nm *nm, const t_Sym_32 *sym)
-{
-	const Elf32_Shdr	*hdr = ft_get_section_hdr_32(nm, sym->st_shndx);
-	Elf32_Phdr	*p_hdr;
-	Elf32_Half	i;
-	Elf32_Off	start;
-	Elf32_Off	end;
-	Elf32_Off	start_section;
-	Elf32_Word	p_type;
-	Elf32_Word	p_flags;
-
-	i = 0;
-	while (i < nm->bin_32.e_phnum)
-	{
-		p_hdr = ft_get_prg_hdr_32(nm, i);
-		start = swap_uint32(p_hdr->p_offset, nm->global_infos.endian);
-		end = start + swap_uint32(p_hdr->p_filesz, nm->global_infos.endian);
-		start_section = swap_uint32(hdr->sh_offset, nm->global_infos.endian);
-		if (start <= start_section && start_section < end)
-		{
-			p_type = swap_uint32(p_hdr->p_type, nm->global_infos.endian);
-			p_flags = swap_uint32(p_hdr->p_flags, nm->global_infos.endian);
-			if (p_type == PT_LOAD && p_flags == (PF_W | PF_R))
-				return (get_char_lower_upper('d', sym->bind == STB_GLOBAL));
-			if (p_type == PT_LOAD && p_flags == (PF_R))
-				return (get_char_lower_upper('r', sym->bind == STB_GLOBAL));
-			if (p_type == PT_LOAD && p_flags == (PF_R | PF_X))
-				return (get_char_lower_upper('t', sym->bind == STB_GLOBAL));
-			if (p_type == PT_GNU_STACK)
-				return (get_char_lower_upper('p', 0));
-		}
-		++i;
-	}
-	return 0;
-}
-
 static char	ft_symbol_get_type_link_32(
 	t_nm *nm,
 	const t_Sym_32 *sym,
@@ -128,16 +92,12 @@ static char	ft_symbol_get_type_link_32(
 	const Elf32_Shdr	*hdr = ft_get_section_hdr_32(nm, sym->st_shndx);
 	u_int32_t			sh_flags;
 	u_int32_t			sh_type;
-	char				c;
 
 	if (!hdr)
 	{
 		print_prg_error(nm, ERR_FILE_RECONIZED);
 		return (0);
 	}
-	c = ft_get_type_by_segment_32(nm, sym);
-	if (c)
-		return (c);
 	sh_flags = swap_uint32(hdr->sh_flags, nm->global_infos.endian);
 	sh_type = swap_uint32(hdr->sh_type, nm->global_infos.endian);
 	return (ft_symbol_get_type_link_algo_32(sym, name, sh_flags, sh_type));

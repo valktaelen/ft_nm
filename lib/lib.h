@@ -6,7 +6,7 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 06:51:18 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/27 15:12:45 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/24 10:30:37 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,6 @@ char		*ft_symbol_get_name_64(
 				const t_S_hdr_64 *hdr,
 				const t_Sym_64 *sym);
 
-Elf64_Phdr	*ft_get_prg_hdr_64(t_nm *nm, Elf64_Half i_table);
-
 /*******************************************/
 /**************** 32-bits ******************/
 /*******************************************/
@@ -74,7 +72,5 @@ char		*ft_symbol_get_name_32(
 				t_nm *nm,
 				const t_S_hdr_32 *hdr,
 				const t_Sym_32 *sym);
-
-Elf32_Phdr	*ft_get_prg_hdr_32(t_nm *nm, Elf32_Half i_table);
 
 #endif

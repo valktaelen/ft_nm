@@ -6,7 +6,7 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 06:52:01 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/24 14:46:16 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/25 09:07:40 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	*ft_symbol_get_name_64(t_nm *nm, const t_S_hdr_64 *hdr,
 		return (ft_symbol_get_name_section_64(nm, sym, str_tab));
 	return (str_tab + sym->st_name);
 }
-#include <stdio.h>
+
 static char	ft_symbol_get_type_link_algo_64(
 	const t_Sym_64 *sym,
 	char *name,

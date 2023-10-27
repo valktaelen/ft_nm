@@ -6,7 +6,7 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 06:52:10 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/24 09:36:56 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/27 08:28:09 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ size_t	ft_list_size_64(t_symbol_64 *lst)
 	return (i);
 }
 
-static void	ft_switch_64(
+static u_int8_t	ft_switch_64(
 	t_nm *nm,
 	t_symbol_64 **current,
 	t_symbol_64 **prev,
@@ -68,33 +68,35 @@ static void	ft_switch_64(
 		(*old)->next = (*current);
 	(*prev) = *current;
 	*current = (*prev)->next;
+	return (1);
 }
 
 void	ft_list_sort_64(t_nm *nm)
 {
-	const size_t	len = ft_list_size_64(nm->bin_64.syms);
 	t_symbol_64		*prev;
 	t_symbol_64		*current;
 	t_symbol_64		*old;
-	size_t			i;
+	t_symbol_64		*last;
+	u_int8_t		i;
 
-	i = 0;
-	while (!(nm->flags & FLAG_NO_SORT) && i < len)
+	i = 1;
+	last = nm->bin_64.syms - 1;
+	while (!(nm->flags & FLAG_NO_SORT) && i)
 	{
 		prev = nm->bin_64.syms;
 		current = prev->next;
-		while (current)
+		i = 0;
+		while (current && current != last)
 		{
-			if (!(nm->flags & FLAG_REVERSE)
+			if ((!(nm->flags & FLAG_NO_SORT)
 				&& ft_sort_string_symbol(prev->name, current->name) > 0)
-				ft_switch_64(nm, &current, &prev, &old);
-			else if ((nm->flags & FLAG_REVERSE)
-				&& ft_sort_string_symbol(prev->name, current->name) < 0)
-				ft_switch_64(nm, &current, &prev, &old);
+				|| ((nm->flags & FLAG_NO_SORT)
+				&& ft_sort_string_symbol(prev->name, current->name) < 0))
+				i = ft_switch_64(nm, &current, &prev, &old);
 			old = prev;
 			prev = current;
 			current = current->next;
 		}
-		++i;
+		last = prev;
 	}
 }

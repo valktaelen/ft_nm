@@ -6,7 +6,7 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 06:51:45 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/24 15:00:49 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/27 08:21:34 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,7 @@ int	ft_nm_symbol_32(t_nm *nm, const t_S_hdr_32 *hdr, Elf32_Sym *map_sym)
 	if (!sym)
 		return (1);
 	name = ft_symbol_get_name_32(nm, hdr, sym);
-	if (!name || (sym->st_name == 0
-			&& sym->st_value == 0))
+	if (!name || (sym->st_name == 0 && sym->st_value == 0))
 	{
 		free((void *)sym);
 		return (0);

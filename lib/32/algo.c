@@ -6,7 +6,7 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 06:51:45 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/27 08:21:34 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/27 16:07:05 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	ft_nm_symbol_32(t_nm *nm, const t_S_hdr_32 *hdr, Elf32_Sym *map_sym)
 	if (!sym)
 		return (1);
 	name = ft_symbol_get_name_32(nm, hdr, sym);
-	if (!name || (sym->st_name == 0 && sym->st_value == 0))
+	if (!name)
 	{
 		free((void *)sym);
 		return (0);
@@ -96,6 +96,7 @@ int	ft_nm_32(t_nm *nm)
 {
 	Elf32_Half	i_section;
 	Elf32_Shdr	*section;
+	t_symbol_32	*node_sym;
 
 	if (ft_get_elf_hdr_infos_32(nm))
 		return (1);
@@ -111,6 +112,12 @@ int	ft_nm_32(t_nm *nm)
 		++i_section;
 	}
 	nm->bin_32.hdrs = NULL;
+	node_sym = nm->bin_32.syms;
+	if (node_sym)
+	{
+		nm->bin_32.syms = node_sym->next;
+		free(node_sym);
+	}
 	ft_list_sort_32(nm);
 	return (0);
 }

@@ -88,9 +88,9 @@ void	ft_list_sort_32(t_nm *nm)
 		i = 0;
 		while (current && current != last)
 		{
-			if ((!(nm->flags & FLAG_NO_SORT)
+			if ((!(nm->flags & FLAG_REVERSE)
 				&& ft_sort_string_symbol(prev->name, current->name) > 0)
-				|| ((nm->flags & FLAG_NO_SORT)
+				|| ((nm->flags & FLAG_REVERSE)
 				&& ft_sort_string_symbol(prev->name, current->name) < 0))
 				i = ft_switch_32(nm, &current, &prev, &old);
 			old = prev;

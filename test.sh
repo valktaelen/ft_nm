@@ -37,14 +37,14 @@ find "$directory" -type d -name .git -prune -o -type f -print0 | while IFS= read
 
 	if [ $ft_nm_ok -ne $nm_ok ]; then
 		echo "$base_name" not same exit status
-		exit 0
-	fi
-
-	diff "$base_name.1"  "$base_name.2" &>/dev/null
-	if [ $? -ne 0 ]; then
-		if [ $ft_nm_ok -ne 0 ] && [ $nm_ok -ne 0 ]; then
-			echo "$base_name" KO
+	else
+		diff "$base_name.1"  "$base_name.2" &>/dev/null
+		if [ $? -ne 0 ]; then
+			if [ $ft_nm_ok -ne 0 ] && [ $nm_ok -ne 0 ]; then
+				echo "$base_name" KO
+			fi
 		fi
 	fi
+
 done
 

@@ -6,7 +6,7 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 06:52:10 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/27 08:28:09 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/27 10:01:50 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void	ft_list_sort_64(t_nm *nm)
 
 	i = 1;
 	last = nm->bin_64.syms - 1;
-	while (!(nm->flags & FLAG_NO_SORT) && i)
+	while (nm->bin_64.syms && !(nm->flags & FLAG_NO_SORT) && i)
 	{
 		prev = nm->bin_64.syms;
 		current = prev->next;

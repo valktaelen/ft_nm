@@ -6,7 +6,7 @@
 /*   By: aartiges <aartiges@student.42lyon.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/23 06:52:33 by aartiges          #+#    #+#             */
-/*   Updated: 2023/10/24 10:03:29 by aartiges         ###   ########lyon.fr   */
+/*   Updated: 2023/10/27 15:15:26 by aartiges         ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,11 @@ typedef struct s_binary_64 {
 	Elf64_Half	e_shstrndx;
 	Elf64_Shdr	*hdrs;
 	t_symbol_64	*syms;
+	Elf64_Off	e_phoff;
+	Elf64_Half	e_ehsize;
+	Elf64_Half	e_phentsize;
+	Elf64_Half	e_phnum;
+	Elf64_Phdr	*prg_hdrs;
 }	t_binary_64;
 
 /*******************************************/
@@ -115,6 +120,11 @@ typedef struct s_binary_32 {
 	Elf32_Half	e_shstrndx;
 	Elf32_Shdr	*hdrs;
 	t_symbol_32	*syms;
+	Elf32_Off	e_phoff;
+	Elf32_Half	e_ehsize;
+	Elf32_Half	e_phentsize;
+	Elf32_Half	e_phnum;
+	Elf32_Phdr	*prg_hdrs;
 }	t_binary_32;
 
 /*******************************************/

@@ -53,6 +53,7 @@
 # define DR_SECTION			".data.rel.ro"
 # define D_SECTION			".data"
 # define BSS_SECTION		".bss"
+# define TXT_SECTION		".text"
 
 # define FT_LITTLE_ENDIAN	1
 # define FT_BIG_ENDIAN		2
